@@ -8,7 +8,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.Locale;
@@ -17,6 +20,7 @@ import java.util.Locale;
 @Configuration
 @ComponentScan("ru.nikolaev.chat.dao")
 @PropertySource("classpath:datasource-cfg.properties")
+@EnableTransactionManagement
 public class RepositoryConfig {
     // The Environment class serves as the property holder
     // and stores all the properties loaded by the @PropertySource
@@ -44,5 +48,10 @@ public class RepositoryConfig {
         return new JdbcTemplate(dataSource);
     }
 
+    @Bean
+    @Autowired
+    public PlatformTransactionManager txManager(DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
+    }
 
 }

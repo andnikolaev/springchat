@@ -17,7 +17,7 @@ public class TestController {
     @GetMapping("/addUser")
     public String test() {
         User user = new User();
-        user.setName("adsda");
+        user.setName("ad=jud");
         user.setPassword("s");
         userService.register(user);
         return user.toString();

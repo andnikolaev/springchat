@@ -30,15 +30,13 @@ public class JdbcUserDao implements UserDao {
     @Autowired
     private Environment env;
 
-    @Autowired
-    private MessageDao messageDao;
-
     @Override
     //TODO убрать тестовый хардкод
     public int addUser(User user) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(env.getProperty("user.add"), new String[]{"id"});
+            String sql = env.getProperty("user.add");
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
             ps.setString(1, user.getName());
             ps.setString(2, user.getPassword());
             ps.setInt(3, 1);
