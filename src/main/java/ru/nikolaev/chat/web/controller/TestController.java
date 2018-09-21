@@ -6,19 +6,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.nikolaev.chat.dao.UserDao;
 import ru.nikolaev.chat.entity.User;
+import ru.nikolaev.chat.web.service.UserService;
 
 @RestController
 @RequestMapping("/api")
 public class TestController {
     @Autowired
-    private UserDao jdbcUserDao;
+    private UserService userService;
 
     @GetMapping("/addUser")
     public String test() {
         User user = new User();
-        user.setName("adsd");
+        user.setName("adsda");
         user.setPassword("s");
-        user.setId(jdbcUserDao.register(user));
+        userService.register(user);
         return user.toString();
     }
 }

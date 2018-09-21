@@ -1,14 +1,28 @@
 package ru.nikolaev.chat.entity;
 
-import lombok.Data;
-import org.springframework.stereotype.Component;
+public enum EventType {
 
-@Data
-@Component
-public class EventType {
+    REGISTERED(1),
 
-    private int id;
+    MESSAGE(2),
 
-    private String name;
+    LOGOUT(3),
 
+    LOGIN(4),
+
+    KICKED(5),
+
+    BANNED(6),
+
+    DELETED(7);
+
+    private final int id;
+
+    EventType(int id) {
+        this.id = id;
+    }
+
+    public int id() {
+        return this.id;
+    }
 }
