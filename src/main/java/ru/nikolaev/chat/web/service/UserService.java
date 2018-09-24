@@ -8,6 +8,9 @@ import ru.nikolaev.chat.dao.UserDao;
 import ru.nikolaev.chat.entity.EventType;
 import ru.nikolaev.chat.entity.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -24,4 +27,12 @@ public class UserService {
         return false;
     }
 
+    public boolean sendMessage(User user, String message){
+        eventDao.sendEvent(user, EventType.MESSAGE, message);
+        return false;
+    }
+
+    public List<User> getOnlineUsers() {
+        return new ArrayList<>();
+    }
 }
