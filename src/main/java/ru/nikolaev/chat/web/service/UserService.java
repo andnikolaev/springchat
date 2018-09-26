@@ -27,10 +27,14 @@ public class UserService {
         return false;
     }
 
-    public boolean sendMessage(User user, String message){
-        eventDao.sendEvent(user, EventType.MESSAGE, message);
-        return false;
+    public void login(User user) {
+        eventDao.sendEvent(user, EventType.LOGIN, "User login in this chat");
     }
+
+    public void logout(User user) {
+        eventDao.sendEvent(user, EventType.LOGIN, "User logout from this chat");
+    }
+
 
     public List<User> getOnlineUsers() {
         return new ArrayList<>();

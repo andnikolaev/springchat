@@ -37,7 +37,7 @@ public class JdbcEventDao implements EventDao {
             ps.setInt(2, assigneeId);
             ps.setInt(3, eventType.id());
             ps.setString(4, message);
-            ps.setString(5, owner.getIp());
+            ps.setString(5, "10.1.1.1");
             return ps;
         }, keyHolder);
         return keyHolder.getKey().intValue();

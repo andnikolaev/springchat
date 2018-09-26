@@ -4,7 +4,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 
 public class ChatInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[]{RepositoryConfig.class};
+        return new Class<?>[]{RepositoryConfig.class, SpringSecurityConfig.class};
     }
 
     protected Class<?>[] getServletConfigClasses() {
