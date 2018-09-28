@@ -8,6 +8,7 @@
 ###
 POST http://localhost:8090/chat/api/allUsers
 Content-Type: application/json
+Authorization: user1:user1Pass
 
 {
     "id": 11,

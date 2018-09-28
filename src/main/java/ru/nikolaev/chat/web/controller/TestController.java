@@ -10,6 +10,7 @@ import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.web.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.xml.bind.annotation.XmlElement;
 import java.util.List;
 
@@ -44,11 +45,22 @@ public class TestController {
         return "a";
     }
 
+    @GetMapping(value = "/getUser")
+    public String getUser(HttpSession session) {
+        User user = (User) session.getAttribute("uset");
+        if (user == null) {
+            user = new User();
+            user.setId(6);
+            user.setName("and");
+            session.setAttribute("uset", user);
+        }
+        return user.toString();
+    }
+
     @PostMapping(value = "/allUsers")
     public String allUsers(@RequestBody User user) {
         return user.toString();
     }
-
 
 
 }
