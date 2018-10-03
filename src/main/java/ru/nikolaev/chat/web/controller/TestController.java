@@ -1,24 +1,17 @@
 package ru.nikolaev.chat.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.web.bind.annotation.*;
-import ru.nikolaev.chat.dao.UserDao;
-import ru.nikolaev.chat.entity.Message;
 import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.web.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.xml.bind.annotation.XmlElement;
-import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 public class TestController {
-    @Autowired
-    private SessionRegistry sessionRegistry;
+
 
     @Autowired
     private UserService userService;
