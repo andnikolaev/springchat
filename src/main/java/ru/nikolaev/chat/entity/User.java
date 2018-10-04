@@ -18,4 +18,6 @@ public class User {
     private String name;
     @JsonIgnore
     private String password;
+    private UserStatus userStatus;
+    private UserRole userRole;
 }

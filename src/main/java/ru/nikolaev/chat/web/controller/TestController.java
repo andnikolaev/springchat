@@ -2,7 +2,9 @@ package ru.nikolaev.chat.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.nikolaev.chat.annotation.Permission;
 import ru.nikolaev.chat.entity.User;
+import ru.nikolaev.chat.entity.UserRole;
 import ru.nikolaev.chat.web.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,6 +40,7 @@ public class TestController {
         return "a";
     }
 
+    @Permission(role = {UserRole.USER, UserRole.ADMIN})
     @GetMapping(value = "/getUser")
     public String getUser(HttpSession session) {
         User user = (User) session.getAttribute("uset");

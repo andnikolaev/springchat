@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import ru.nikolaev.chat.web.interceptor.UserAuthenticationInterceptor;
+import ru.nikolaev.chat.web.interceptor.UserPermissionInterceptor;
 
 import java.util.Locale;
 
@@ -30,6 +32,12 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("home");
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new UserPermissionInterceptor());
+        registry.addInterceptor(new UserAuthenticationInterceptor());
     }
 
     @Override
