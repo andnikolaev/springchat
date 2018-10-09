@@ -22,7 +22,7 @@ public class TestController {
     public String test(HttpServletRequest request) {
         User user = new User();
         user.setName("ad=jud");
-        user.setPassword("sdasd");
+        //user.setPassword("sdasd");
         String remoteAddr = "";
         if (request != null) {
             remoteAddr = request.getHeader("X-FORWARDED-FOR");

@@ -5,6 +5,7 @@ import org.springframework.web.context.annotation.RequestScope;
 
 @Component
 @RequestScope
-public class RegisteredUserDto {
-
+public class AuthUserDto {
+    private String name;
+    private String password;
 }

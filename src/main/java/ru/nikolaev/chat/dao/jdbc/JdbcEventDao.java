@@ -32,9 +32,9 @@ public class JdbcEventDao implements EventDao {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement("insert into EVENT (owner_id,assigne_id,event_type_id,message,ip) values(?,?,?,?,?)", new String[]{"id"});
-            ps.setInt(1, owner.getId());
-            int assigneeId = assignee != null ? assignee.getId() : 0;
-            ps.setInt(2, assigneeId);
+            ps.setLong(1, owner.getId());
+            long assigneeId = assignee != null ? assignee.getId() : 0;
+            ps.setLong(2, assigneeId);
             ps.setInt(3, eventType.id());
             ps.setString(4, message);
             ps.setString(5, "10.1.1.1");

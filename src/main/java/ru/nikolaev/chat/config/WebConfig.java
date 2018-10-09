@@ -34,9 +34,15 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/").setViewName("home");
     }
 
+
+    @Bean
+    public UserPermissionInterceptor userPermissionInterceptor() {
+        return new UserPermissionInterceptor();
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new UserPermissionInterceptor());
+        registry.addInterceptor(userPermissionInterceptor());
         registry.addInterceptor(new UserAuthenticationInterceptor());
     }
 

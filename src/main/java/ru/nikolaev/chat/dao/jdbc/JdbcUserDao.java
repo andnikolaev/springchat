@@ -38,7 +38,6 @@ public class JdbcUserDao implements UserDao {
             String sql = env.getProperty("user.add");
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
             ps.setString(1, user.getName());
-            ps.setString(2, user.getPassword());
             ps.setInt(3, 1);
             ps.setInt(4, 1);
             return ps;
