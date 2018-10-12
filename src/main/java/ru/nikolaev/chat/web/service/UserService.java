@@ -27,8 +27,8 @@ public class UserService {
         return false;
     }
 
-    public void login(User user) {
-        eventDao.sendEvent(user, EventType.LOGIN, "User login in this chat");
+    public void login(String name, String password) {
+        //    eventDao.sendEvent(user, EventType.LOGIN, "User login in this chat");
     }
 
     public void logout(User user) {

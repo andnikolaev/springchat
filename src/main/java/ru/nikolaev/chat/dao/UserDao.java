@@ -8,7 +8,7 @@ public interface UserDao {
 
     int addUser(User user);
 
-    int login(User user);
+    User login(User user);
 
     void logout(User user);
 

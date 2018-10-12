@@ -15,9 +15,13 @@ Authorization: user1:user1Pass
     "name": "dsadas"
 }
 ###
-GET http://localhost:8090/api/
-Accept: application/json
+POST http://localhost:8090/chat/api/auth
+Content-Type: application/json
 
+{
+    "name": "sd",
+    "password": "dsadas"
+}
 ###
 
 POST http://localhost:8090/chat/api/allUsers

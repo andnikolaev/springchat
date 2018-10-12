@@ -46,8 +46,13 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public int login(User user) {
-        return 0;
+    public User login(User user) {
+        return null;
+    }
+
+
+    public User login(String name, String password) {
+        return null;
     }
 
     @Override
