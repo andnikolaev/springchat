@@ -26,6 +26,8 @@ public class User {
     private UserStatus userStatus;
     private UserRole userRole;
 
+    private String ip;
+
     @PostConstruct
     public void initRole() {
         userRole = UserRole.ANONYMOUS;

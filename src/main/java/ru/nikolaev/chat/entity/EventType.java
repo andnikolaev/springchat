@@ -1,6 +1,10 @@
 package ru.nikolaev.chat.entity;
 
+import org.omg.CORBA.UNKNOWN;
+
 public enum EventType {
+
+    UNKNOWN(0),
 
     REGISTERED(1),
 
@@ -24,5 +28,14 @@ public enum EventType {
 
     public int id() {
         return this.id;
+    }
+
+    public static EventType getEventTypeById(int id) {
+        for (EventType eventType : values()) {
+            if (eventType.id == id) {
+                return eventType;
+            }
+        }
+        return UNKNOWN;
     }
 }

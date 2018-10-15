@@ -17,24 +17,14 @@ public class UserService {
     @Autowired
     private UserDao userDao;
 
-    @Autowired
+       @Autowired
     private EventDao eventDao;
 
-    @Transactional
     public boolean register(User user) {
         user.setId(userDao.addUser(user));
         eventDao.sendEvent(user, EventType.REGISTERED, "User was register");
         return false;
     }
-
-    public void login(String name, String password) {
-        //    eventDao.sendEvent(user, EventType.LOGIN, "User login in this chat");
-    }
-
-    public void logout(User user) {
-        eventDao.sendEvent(user, EventType.LOGIN, "User logout from this chat");
-    }
-
 
     public List<User> getOnlineUsers() {
         return new ArrayList<>();

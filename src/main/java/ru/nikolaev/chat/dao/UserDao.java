@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface UserDao {
 
-    int addUser(User user);
+    int addUser(String name, String password);
 
-    User login(User user);
+    User checkAuth(String name, String password);
 
     void logout(User user);
 

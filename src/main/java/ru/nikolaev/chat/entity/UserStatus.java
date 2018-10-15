@@ -1,6 +1,7 @@
 package ru.nikolaev.chat.entity;
 
 public enum UserStatus {
+    UNKNOWN(0),
     ACTIVE(1),
     BANNED(2),
     DELETED(3);
@@ -12,5 +13,14 @@ public enum UserStatus {
 
     public int id() {
         return this.id;
+    }
+
+    public static UserStatus getEventTypeById(int id) {
+        for (UserStatus userStatus : values()) {
+            if (userStatus.id == id) {
+                return userStatus;
+            }
+        }
+        return UNKNOWN;
     }
 }

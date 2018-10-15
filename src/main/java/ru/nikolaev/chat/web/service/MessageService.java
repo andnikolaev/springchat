@@ -13,12 +13,11 @@ public class MessageService {
     @Autowired
     private EventDao eventDao;
 
-    public boolean sendMessage(User user, String message) {
+    public void sendMessage(User user, String message) {
         eventDao.sendEvent(user, EventType.MESSAGE, message);
-        return false;
     }
 
-    public List<Message> getAllMessages() {
+    public List<Message> getLastMessages(int count) {
         List<Message> messageList = null;
         return messageList;
     }

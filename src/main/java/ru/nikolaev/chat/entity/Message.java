@@ -12,8 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Component
 public class Message {
-    private User user;
+    private long userId;
     private String text;
     private LocalDateTime timestamp;
-
 }

@@ -10,6 +10,7 @@ import ru.nikolaev.chat.dao.dto.AuthUserDto;
 import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.entity.UserRole;
 import ru.nikolaev.chat.web.UserSessionHandler;
+import ru.nikolaev.chat.web.service.AuthService;
 import ru.nikolaev.chat.web.service.UserService;
 
 @RestController
@@ -19,7 +20,7 @@ public class AuthorizationController {
     @Autowired
     private UserSessionHandler userSessionHandler;
     @Autowired
-    private UserService userService;
+    private AuthService authService;
 
     @Autowired
     private User user;
@@ -30,9 +31,8 @@ public class AuthorizationController {
     public void login(@RequestBody AuthUserDto userDto) {
         String name = userDto.getName();
         String password = DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes());
-//        User user = userService.login(name, password);/**/
-        System.out.println(password);
-        
+        User user = authService.login(name, password);
+
     }
 
     @DeleteMapping

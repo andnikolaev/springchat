@@ -11,6 +11,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.nikolaev.chat.dao.MessageDao;
 import ru.nikolaev.chat.dao.UserDao;
+import ru.nikolaev.chat.dao.jdbc.mapper.UserMapper;
 import ru.nikolaev.chat.entity.User;
 
 import javax.sql.DataSource;
@@ -31,15 +32,13 @@ public class JdbcUserDao implements UserDao {
     private Environment env;
 
     @Override
-    //TODO убрать тестовый хардкод
-    public int addUser(User user) {
+    public int addUser(String name, String password) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             String sql = env.getProperty("user.add");
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
-            ps.setString(1, user.getName());
-            ps.setInt(3, 1);
-            ps.setInt(4, 1);
+            ps.setString(1, name);
+            ps.setString(2, password);
             return ps;
         }, keyHolder);
         return keyHolder.getKey().intValue();
@@ -50,9 +49,14 @@ public class JdbcUserDao implements UserDao {
         return null;
     }
 
-
-    public User login(String name, String password) {
-        return null;
+    @Override
+    public User checkAuth(String name, String password) {
+        String sql = "select * from ALL_USER where name=? AND password = ?";
+        List<User> users = jdbcTemplate.query(sql, ps -> {
+            ps.setString(1, name);
+            ps.setString(1, password);
+        }, new UserMapper());
+        return users.get(0);
     }
 
     @Override
