@@ -8,10 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import ru.nikolaev.chat.annotation.Permission;
 import ru.nikolaev.chat.dao.dto.AuthUserDto;
 import ru.nikolaev.chat.entity.User;
-import ru.nikolaev.chat.entity.UserRole;
+import ru.nikolaev.chat.enums.UserRole;
 import ru.nikolaev.chat.web.UserSessionHandler;
 import ru.nikolaev.chat.web.service.AuthService;
-import ru.nikolaev.chat.web.service.UserService;
 
 @RestController
 @RequestMapping(value = "/api/auth")

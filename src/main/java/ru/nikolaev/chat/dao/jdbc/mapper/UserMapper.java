@@ -2,8 +2,8 @@ package ru.nikolaev.chat.dao.jdbc.mapper;
 
 import org.springframework.jdbc.core.RowMapper;
 import ru.nikolaev.chat.entity.User;
-import ru.nikolaev.chat.entity.UserRole;
-import ru.nikolaev.chat.entity.UserStatus;
+import ru.nikolaev.chat.enums.UserRole;
+import ru.nikolaev.chat.enums.UserStatus;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

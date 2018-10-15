@@ -6,7 +6,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import ru.nikolaev.chat.annotation.Permission;
 import ru.nikolaev.chat.entity.User;
-import ru.nikolaev.chat.entity.UserRole;
+import ru.nikolaev.chat.enums.UserRole;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

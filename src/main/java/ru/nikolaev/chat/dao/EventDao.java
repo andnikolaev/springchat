@@ -1,6 +1,6 @@
 package ru.nikolaev.chat.dao;
 
-import ru.nikolaev.chat.entity.EventType;
+import ru.nikolaev.chat.enums.EventType;
 import ru.nikolaev.chat.entity.User;
 
 public interface EventDao {

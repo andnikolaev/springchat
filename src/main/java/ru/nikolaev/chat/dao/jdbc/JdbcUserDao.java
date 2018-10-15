@@ -45,11 +45,6 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public User login(User user) {
-        return null;
-    }
-
-    @Override
     public User checkAuth(String name, String password) {
         String sql = "select * from ALL_USER where name=? AND password = ?";
         List<User> users = jdbcTemplate.query(sql, ps -> {

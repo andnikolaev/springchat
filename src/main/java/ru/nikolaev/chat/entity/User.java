@@ -1,13 +1,11 @@
 package ru.nikolaev.chat.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.SessionScope;
+import ru.nikolaev.chat.enums.UserRole;
+import ru.nikolaev.chat.enums.UserStatus;
 
 import javax.annotation.PostConstruct;
 
@@ -16,8 +14,6 @@ import javax.annotation.PostConstruct;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@Component(value = "user")
-@SessionScope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class User {
 
     private long id;

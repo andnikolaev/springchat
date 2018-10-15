@@ -1,4 +1,4 @@
-package ru.nikolaev.chat.entity;
+package ru.nikolaev.chat.enums;
 
 public enum UserStatus {
     UNKNOWN(0),

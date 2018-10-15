@@ -1,4 +1,4 @@
-package ru.nikolaev.chat.entity;
+package ru.nikolaev.chat.enums;
 
 public enum UserRole {
     UNKNOWN(0),

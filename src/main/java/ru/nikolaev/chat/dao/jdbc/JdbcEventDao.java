@@ -7,7 +7,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.nikolaev.chat.dao.EventDao;
-import ru.nikolaev.chat.entity.EventType;
+import ru.nikolaev.chat.enums.EventType;
 import ru.nikolaev.chat.entity.User;
 
 import java.sql.PreparedStatement;

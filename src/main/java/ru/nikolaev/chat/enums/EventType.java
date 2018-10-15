@@ -1,6 +1,4 @@
-package ru.nikolaev.chat.entity;
-
-import org.omg.CORBA.UNKNOWN;
+package ru.nikolaev.chat.enums;
 
 public enum EventType {
 

@@ -1,6 +1,6 @@
 package ru.nikolaev.chat.annotation;
 
-import ru.nikolaev.chat.entity.UserRole;
+import ru.nikolaev.chat.enums.UserRole;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
