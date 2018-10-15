@@ -6,13 +6,12 @@
 # * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
 
 ###
-POST http://localhost:8090/chat/api/allUsers
+POST http://localhost:8090/chat/api/users
 Content-Type: application/json
-Authorization: user1:user1Pass
 
 {
-    "id": 11,
-    "name": "dsadas"
+    "name": "test1",
+    "password": "1"
 }
 ###
 POST http://localhost:8090/chat/api/auth

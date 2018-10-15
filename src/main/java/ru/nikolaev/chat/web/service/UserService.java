@@ -20,8 +20,8 @@ public class UserService {
     private EventDao eventDao;
 
     public boolean register(User user) {
-        user.setId(userDao.addUser(user));
-        eventDao.sendEvent(user, EventType.REGISTERED, "User was register");
+//        user.setId(userDao.addUser(user));
+//        eventDao.sendEvent(user, EventType.REGISTERED, "User was register");
         return false;
     }
 
