@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @Component
 public class UserPermissionInterceptor implements HandlerInterceptor {
-    @Autowired
     private User user;
 
     @Override
