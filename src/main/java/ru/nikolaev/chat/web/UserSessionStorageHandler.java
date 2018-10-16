@@ -3,6 +3,7 @@ package ru.nikolaev.chat.web;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.ApplicationScope;
 import ru.nikolaev.chat.entity.User;
@@ -33,7 +34,8 @@ public class UserSessionStorageHandler {
     }
 
     public void invalidate(UserSession userSession) {
-        Optional<UserSession> optionalUserSession = userSessions.stream().filter(userSession1 -> userSession.equals(userSession1)).findFirst();
+        UserSession commonUserSession = userSession;
+        Optional<UserSession> optionalUserSession = userSessions.stream().filter(userSession1 -> commonUserSession.equals(userSession1)).findFirst();
         optionalUserSession.ifPresent(userSession1 -> userSession1.getHttpSession().invalidate());
     }
 
@@ -50,4 +52,9 @@ public class UserSessionStorageHandler {
         userSessions.remove(userSession);
     }
 
+    private UserSession convertProxyToCommonUserSession(UserSession proxyUserSessionObject) {
+        UserSession commonUserSessionObject = new UserSession();
+        BeanUtils.copyProperties(proxyUserSessionObject, commonUserSessionObject);
+        return commonUserSessionObject;
+    }
 }

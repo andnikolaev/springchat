@@ -8,6 +8,5 @@ import org.springframework.web.context.annotation.RequestScope;
 @RequestScope
 @Data
 public class MessageDto {
-    private long userId;
     private String text;
 }

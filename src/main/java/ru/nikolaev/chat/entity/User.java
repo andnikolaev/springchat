@@ -1,5 +1,6 @@
 package ru.nikolaev.chat.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,6 +23,7 @@ public class User {
     private UserStatus userStatus;
     private UserRole userRole;
 
+    @JsonIgnore
     private String ip;
 
     public User(long id) {

@@ -18,10 +18,11 @@ import ru.nikolaev.chat.web.service.AuthService;
 import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/sessions")
-public class AuthorizationController {
+public class SessionController {
     @Autowired
     private UserSession userSession;
     @Autowired
@@ -32,23 +33,25 @@ public class AuthorizationController {
     @PostMapping
     @Permission(role = UserRole.ANONYMOUS)
     @ResponseStatus(HttpStatus.OK)
-    public void login(@RequestBody AuthUserDto userDto, HttpServletRequest httpServletRequest, HttpSession httpSession) {
+    public User login(@RequestBody AuthUserDto userDto, HttpServletRequest httpServletRequest, HttpSession httpSession) {
         String name = userDto.getName();
         String password = DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes());
         User user = authService.login(name, password, httpServletRequest.getRemoteAddr());
         BeanUtils.copyProperties(user, userSession.getUser());
         userSessionStorageHandler.initUserSession(userSession, httpSession);
+        return user;
     }
 
     @DeleteMapping
     @Permission(role = {UserRole.ADMIN, UserRole.USER})
+    @ResponseStatus(HttpStatus.OK)
     public void logout(HttpServletRequest httpServletRequest) {
         authService.logout(userSession.getUser(), httpServletRequest.getRemoteAddr());
         userSessionStorageHandler.invalidate(userSession);
     }
 
     @GetMapping
-    public String getOnlineUsers() {
-        return userSessionStorageHandler.getUsers().toString();
+    public List<User> getOnlineUsers() {
+        return userSessionStorageHandler.getUsers();
     }
 }

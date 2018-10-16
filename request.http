@@ -10,9 +10,19 @@ POST http://localhost:8090/chat/api/users
 Content-Type: application/json
 
 {
-    "name": "test1",
+    "name": "test11",
     "password": "1"
 }
+###
+###
+POST http://localhost:8090/chat/api/sessions
+Content-Type: application/json
+
+{
+    "name": "And",
+    "password": "123"
+}
+
 ###
 POST http://localhost:8090/chat/api/auth
 Content-Type: application/json

@@ -49,7 +49,7 @@ public class JdbcUserDao implements UserDao {
         String sql = "select * from ALL_USER where name=? AND password = ?";
         List<User> users = jdbcTemplate.query(sql, ps -> {
             ps.setString(1, name);
-            ps.setString(1, password);
+            ps.setString(2, password);
         }, new UserMapper());
         return users.get(0);
     }

@@ -23,7 +23,7 @@ public class MessageController {
     @Permission(role = {UserRole.ADMIN, UserRole.USER})
     @ResponseStatus(HttpStatus.OK)
     public void sendMessage(@RequestBody MessageDto messageDto, HttpServletRequest httpServletRequest) {
-        messageService.sendMessage(messageDto.getUserId(), messageDto.getText(), httpServletRequest.getRemoteAddr());
+        messageService.sendMessage(userSession.getUser().getId(), messageDto.getText(), httpServletRequest.getRemoteAddr());
     }
 
     @GetMapping

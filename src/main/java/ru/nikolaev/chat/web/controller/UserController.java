@@ -35,11 +35,11 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public String registerUser(@RequestBody AuthUserDto userDto, HttpServletRequest httpServletRequest) {
+    public User registerUser(@RequestBody AuthUserDto userDto, HttpServletRequest httpServletRequest) {
         String name = userDto.getName();
         String password = DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes());
         User user = authService.register(name, password, httpServletRequest.getRemoteAddr());
-        return user.toString();
+        return user;
     }
 
     @DeleteMapping("/{id}/session")
