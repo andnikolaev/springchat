@@ -24,6 +24,10 @@ public class User {
 
     private String ip;
 
+    public User(long id) {
+        this.id = id;
+    }
+
     @PostConstruct
     public void initRole() {
         userRole = UserRole.ANONYMOUS;

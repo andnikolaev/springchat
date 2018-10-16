@@ -7,13 +7,15 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import ru.nikolaev.chat.annotation.Permission;
 import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.enums.UserRole;
+import ru.nikolaev.chat.web.UserSession;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Component
 public class UserPermissionInterceptor implements HandlerInterceptor {
-    private User user;
+    @Autowired
+    private UserSession userSession;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -22,9 +24,9 @@ public class UserPermissionInterceptor implements HandlerInterceptor {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             if (handlerMethod.getMethod().isAnnotationPresent(Permission.class)) {
                 Permission methodPermissionAnnotation = handlerMethod.getMethodAnnotation(Permission.class);
-                //TODO Refactor
+                //TODO Сделать выброс исключений из аннотации
                 for (UserRole userRole : methodPermissionAnnotation.role()) {
-                    if (userRole.equals(user.getUserRole())) {
+                    if (userRole.equals(userSession.getUser().getUserRole())) {
                         result = true;
                     }
                 }

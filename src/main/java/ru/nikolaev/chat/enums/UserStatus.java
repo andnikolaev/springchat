@@ -15,7 +15,7 @@ public enum UserStatus {
         return this.id;
     }
 
-    public static UserStatus getEventTypeById(int id) {
+    public static UserStatus getUserStatusById(int id) {
         for (UserStatus userStatus : values()) {
             if (userStatus.id == id) {
                 return userStatus;

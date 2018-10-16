@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Component
 public class Message {
     private long userId;
     private String text;

@@ -12,8 +12,8 @@ public class MessageService {
     @Autowired
     private EventDao eventDao;
 
-    public void sendMessage(User user, String message, String ip) {
-        eventDao.sendEvent(user, EventType.MESSAGE, message, ip);
+    public void sendMessage(long ownerId, String message, String ip) {
+        eventDao.sendEvent(new User(ownerId), EventType.MESSAGE, message, ip);
     }
 
     public List<Message> getLastMessages(int count) {
