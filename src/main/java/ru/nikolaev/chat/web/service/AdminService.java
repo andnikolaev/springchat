@@ -1,11 +1,13 @@
 package ru.nikolaev.chat.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.nikolaev.chat.dao.EventDao;
 import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.enums.EventType;
 import ru.nikolaev.chat.enums.UserStatus;
 
+@Service
 public class AdminService {
     @Autowired
     private EventDao eventDao;

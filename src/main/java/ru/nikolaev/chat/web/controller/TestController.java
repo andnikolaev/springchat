@@ -31,7 +31,7 @@ public class TestController {
             }
         }
         // user.setIp(remoteAddr);
-        userService.register(user);
+      //  userService.register(user);
         return user.toString();
     }
 
