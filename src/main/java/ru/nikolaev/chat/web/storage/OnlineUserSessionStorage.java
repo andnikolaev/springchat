@@ -7,7 +7,7 @@ import javax.servlet.http.HttpSession;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
-@Component
+@Component(value = "storage")
 @ApplicationScope
 public class OnlineUserSessionStorage {
     private Map<OnlineUser, List<HttpSession>> onlineUsersMap;
@@ -35,7 +35,6 @@ public class OnlineUserSessionStorage {
 
     public void invalidateUserSession(HttpSession httpSession) {
         httpSession.invalidate();
-
     }
 
     public void removeUserSession(HttpSession httpSession) {

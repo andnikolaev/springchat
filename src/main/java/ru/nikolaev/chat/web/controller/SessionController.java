@@ -3,7 +3,6 @@ package ru.nikolaev.chat.web.controller;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
@@ -11,11 +10,10 @@ import ru.nikolaev.chat.annotation.Permission;
 import ru.nikolaev.chat.dao.dto.AuthUserDto;
 import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.enums.UserRole;
-import ru.nikolaev.chat.web.UserSession;
-import ru.nikolaev.chat.web.UserSessionStorageHandler;
 import ru.nikolaev.chat.web.service.AuthService;
+import ru.nikolaev.chat.web.storage.OnlineUser;
+import ru.nikolaev.chat.web.storage.OnlineUserSessionStorage;
 
-import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -24,9 +22,10 @@ import java.util.List;
 @RequestMapping(value = "/api/sessions")
 public class SessionController {
     @Autowired
-    private UserSession userSession;
+    private OnlineUser onlineUser;
+
     @Autowired
-    private UserSessionStorageHandler userSessionStorageHandler;
+    private OnlineUserSessionStorage onlineUserSessionStorage;
     @Autowired
     private AuthService authService;
 
@@ -37,8 +36,8 @@ public class SessionController {
         String name = userDto.getName();
         String password = DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes());
         User user = authService.login(name, password, httpServletRequest.getRemoteAddr());
-        BeanUtils.copyProperties(user, userSession.getUser());
-        userSessionStorageHandler.initUserSession(userSession, httpSession);
+        BeanUtils.copyProperties(user, onlineUser);
+        onlineUserSessionStorage.initUserSession(onlineUser, httpSession);
         return user;
     }
 
@@ -46,12 +45,12 @@ public class SessionController {
     @Permission(role = {UserRole.ADMIN, UserRole.USER})
     @ResponseStatus(HttpStatus.OK)
     public void logout(HttpServletRequest httpServletRequest) {
-        authService.logout(userSession.getUser(), httpServletRequest.getRemoteAddr());
-        userSessionStorageHandler.invalidate(userSession);
+        // authService.logout(userSession.getUser(), httpServletRequest.getRemoteAddr());
+        onlineUserSessionStorage.invalidateUserSession(httpServletRequest.getSession());
     }
 
     @GetMapping
-    public List<User> getOnlineUsers() {
-        return userSessionStorageHandler.getUsers();
+    public List<OnlineUser> getOnlineUsers() {
+        return onlineUserSessionStorage.getOnlineUsers();
     }
 }

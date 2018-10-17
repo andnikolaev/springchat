@@ -8,6 +8,7 @@ import ru.nikolaev.chat.annotation.Permission;
 import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.enums.UserRole;
 import ru.nikolaev.chat.web.UserSession;
+import ru.nikolaev.chat.web.storage.OnlineUser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class UserPermissionInterceptor implements HandlerInterceptor {
     @Autowired
-    private UserSession userSession;
+    private OnlineUser onlineUser;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -26,7 +27,7 @@ public class UserPermissionInterceptor implements HandlerInterceptor {
                 Permission methodPermissionAnnotation = handlerMethod.getMethodAnnotation(Permission.class);
                 //TODO Сделать выброс исключений из аннотации
                 for (UserRole userRole : methodPermissionAnnotation.role()) {
-                    if (userRole.equals(userSession.getUser().getUserRole())) {
+                    if (userRole.equals(onlineUser.getUserRole())) {
                         result = true;
                     }
                 }
