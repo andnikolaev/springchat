@@ -7,11 +7,14 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.nikolaev.chat.dao.EventDao;
+import ru.nikolaev.chat.entity.Event;
 import ru.nikolaev.chat.enums.EventType;
 import ru.nikolaev.chat.entity.User;
 
 import java.sql.PreparedStatement;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class JdbcEventDao implements EventDao {
@@ -49,5 +52,12 @@ public class JdbcEventDao implements EventDao {
             return ps;
         }, keyHolder);
         return keyHolder.getKey().intValue();
+    }
+
+    @Override
+    public List<Event> getLastEvents(int count) {
+        List<Event> events = new ArrayList<>();
+
+        return events;
     }
 }

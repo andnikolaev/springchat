@@ -22,7 +22,7 @@ public class UserSessionStorageHandler {
 
     public void initUserSession(UserSession userSession, HttpSession httpSession) {
         userSession.setHttpSession(httpSession);
-        userSessions.add(userSession);
+        userSessions.add(convertProxyToCommonUserSession(userSession));
     }
 
     public void invalidate(User invalidationUser) {
@@ -34,9 +34,9 @@ public class UserSessionStorageHandler {
     }
 
     public void invalidate(UserSession userSession) {
-        UserSession commonUserSession = userSession;
-        Optional<UserSession> optionalUserSession = userSessions.stream().filter(userSession1 -> commonUserSession.equals(userSession1)).findFirst();
-        optionalUserSession.ifPresent(userSession1 -> userSession1.getHttpSession().invalidate());
+        UserSession commonUserSession = convertProxyToCommonUserSession(userSession);
+        Optional<UserSession> optionalUserSession = userSessions.stream().filter(commonUserSession::equals).findFirst();
+        optionalUserSession.ifPresent(userAuth -> userAuth.getHttpSession().invalidate());
     }
 
     public List<User> getUsers() {
@@ -44,12 +44,11 @@ public class UserSessionStorageHandler {
         for (UserSession userSession : userSessions) {
             users.add(userSession.getUser());
         }
-
         return new ArrayList<>(users);
     }
 
     public void remove(UserSession userSession) {
-        userSessions.remove(userSession);
+        userSessions.remove(convertProxyToCommonUserSession(userSession));
     }
 
     private UserSession convertProxyToCommonUserSession(UserSession proxyUserSessionObject) {

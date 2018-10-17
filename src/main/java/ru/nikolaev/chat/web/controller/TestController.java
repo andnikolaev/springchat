@@ -9,6 +9,8 @@ import ru.nikolaev.chat.web.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashSet;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/users")
@@ -17,6 +19,25 @@ public class TestController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TestObject testObject;
+
+    private Set<TestObject> testObjects;
+
+    @GetMapping("/testproxy")
+    public void testProxyObject() {
+        testObjects =new HashSet<>();
+        testObject.setId(2);
+        testObject.setText("asdasd");
+        testObjects.add(testObject);
+    }
+
+    @GetMapping("/testproxy2")
+    public void testProxyObject2() {
+        testObjects.remove(testObject);
+    }
+
 
     @PostMapping(value = "/addUser")
     public String test(HttpServletRequest request) {
@@ -31,7 +52,7 @@ public class TestController {
             }
         }
         // user.setIp(remoteAddr);
-      //  userService.register(user);
+        //  userService.register(user);
         return user.toString();
     }
 
