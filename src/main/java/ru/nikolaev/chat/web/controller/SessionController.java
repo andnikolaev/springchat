@@ -12,6 +12,7 @@ import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.enums.UserRole;
 import ru.nikolaev.chat.web.service.AuthService;
 import ru.nikolaev.chat.web.storage.OnlineUser;
+import ru.nikolaev.chat.web.storage.OnlineUserManager;
 import ru.nikolaev.chat.web.storage.OnlineUserSessionStorage;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,19 +26,19 @@ public class SessionController {
     private OnlineUser onlineUser;
 
     @Autowired
-    private OnlineUserSessionStorage onlineUserSessionStorage;
+    private OnlineUserManager onlineUserManager;
     @Autowired
     private AuthService authService;
 
     @PostMapping
     @Permission(role = UserRole.ANONYMOUS)
     @ResponseStatus(HttpStatus.OK)
-    public User login(@RequestBody AuthUserDto userDto, HttpServletRequest httpServletRequest, HttpSession httpSession) {
+    public User login(@RequestBody AuthUserDto userDto, HttpServletRequest httpServletRequest) {
         String name = userDto.getName();
         String password = DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes());
         User user = authService.login(name, password, httpServletRequest.getRemoteAddr());
         BeanUtils.copyProperties(user, onlineUser);
-        onlineUserSessionStorage.initUserSession(onlineUser, httpSession);
+        onlineUserManager.addUser(onlineUser);
         return user;
     }
 
@@ -46,11 +47,12 @@ public class SessionController {
     @ResponseStatus(HttpStatus.OK)
     public void logout(HttpServletRequest httpServletRequest) {
         // authService.logout(userSession.getUser(), httpServletRequest.getRemoteAddr());
-        onlineUserSessionStorage.invalidateUserSession(httpServletRequest.getSession());
+        httpServletRequest.getSession().invalidate();
+        onlineUserManager.removeUser(onlineUser);
     }
 
     @GetMapping
     public List<OnlineUser> getOnlineUsers() {
-        return onlineUserSessionStorage.getOnlineUsers();
+        return onlineUserManager.getUsers();
     }
 }
