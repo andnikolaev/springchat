@@ -1,30 +1,35 @@
 package ru.nikolaev.chat.web.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.DigestUtils;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import ru.nikolaev.chat.annotation.Permission;
 import ru.nikolaev.chat.dao.dto.AuthUserDto;
 import ru.nikolaev.chat.dao.dto.UserStatusDto;
 import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.enums.EventType;
+import ru.nikolaev.chat.enums.UserRole;
 import ru.nikolaev.chat.enums.UserStatus;
-import ru.nikolaev.chat.web.UserSession;
-import ru.nikolaev.chat.web.UserSessionStorageHandler;
+import ru.nikolaev.chat.exception.BadRequestDataException;
+import ru.nikolaev.chat.exception.ChatExceptionEnum;
+import ru.nikolaev.chat.exception.ExceptionThrower;
 import ru.nikolaev.chat.web.service.AdminService;
 import ru.nikolaev.chat.web.service.AuthService;
+import ru.nikolaev.chat.web.storage.OnlineUserManager;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/api/users")
+@Slf4j
 public class UserController {
 
     @Autowired
-    private UserSessionStorageHandler userSessionStorageHandler;
-
-    @Autowired
-    private UserSession userSession;
+    private OnlineUserManager onlineUserManager;
 
     @Autowired
     private AuthService authService;
@@ -35,7 +40,11 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public User registerUser(@RequestBody AuthUserDto userDto, HttpServletRequest httpServletRequest) {
+    @Permission(role = UserRole.ANONYMOUS, exception = ChatExceptionEnum.USER_EXIST)
+    public User registerUser(@Valid @RequestBody AuthUserDto userDto, Errors validationErrors, HttpServletRequest httpServletRequest) {
+        if (validationErrors.hasErrors()) {
+            new ExceptionThrower(new BadRequestDataException()).addValidationsError(validationErrors).throwException();
+        }
         String name = userDto.getName();
         String password = DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes());
         User user = authService.register(name, password, httpServletRequest.getRemoteAddr());
@@ -44,14 +53,12 @@ public class UserController {
 
     @DeleteMapping("/{id}/session")
     public void kickUser(@PathVariable long id, HttpServletRequest httpServletRequest) {
-        adminService.kickUser(userSession.getUser().getId(), id, httpServletRequest.getRemoteAddr());
-        userSessionStorageHandler.invalidate(new User(id));
+
     }
 
     @PostMapping("/{id}/session")
     public void updateUserStatus(@PathVariable long id, @RequestBody UserStatusDto userStatusDto, HttpServletRequest httpServletRequest) {
-        adminService.updateUserStatus(userSession.getUser().getId(), id, EventType.BANNED, UserStatus.getUserStatusById(userStatusDto.getStatusId()), httpServletRequest.getRemoteAddr());
-        userSessionStorageHandler.invalidate(new User(id));
+      
     }
 
 

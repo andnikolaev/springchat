@@ -1,41 +1,20 @@
 package ru.nikolaev.chat.web.storage;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
-import ru.nikolaev.chat.enums.UserRole;
-import ru.nikolaev.chat.enums.UserStatus;
-
-import javax.annotation.PostConstruct;
+import ru.nikolaev.chat.entity.User;
 
 @Component
 @SessionScope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "user")
 public class OnlineUser {
 
-    private long id;
-    private String name;
+    @Autowired
+    private User user;
 
-    private UserStatus userStatus;
-    private UserRole userRole;
-
-    @JsonIgnore
-    private String ip;
-
-    public OnlineUser(long id) {
-        this.id = id;
-    }
-
-    @PostConstruct
-    public void initRole() {
-        userRole = UserRole.ANONYMOUS;
-    }
 }

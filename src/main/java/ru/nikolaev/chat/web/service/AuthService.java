@@ -10,6 +10,8 @@ import ru.nikolaev.chat.enums.EventType;
 import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.enums.UserRole;
 import ru.nikolaev.chat.enums.UserStatus;
+import ru.nikolaev.chat.exception.ExceptionThrower;
+import ru.nikolaev.chat.exception.UserAlreadyExistException;
 
 @Service
 public class AuthService {
@@ -20,8 +22,16 @@ public class AuthService {
 
     @Transactional
     public User register(String name, String password, String ip) {
-        long userId = userDao.addUser(name, password);
-        User user = new User(userId, name, UserStatus.ACTIVE, UserRole.USER, ip);
+        User existingUser = userDao.getUserByName(name);
+        if (existingUser != null) {
+            new ExceptionThrower(new UserAlreadyExistException()).throwException();
+        }
+        User user = new User();
+        user.setName(name);
+        user.setPassword(password);
+        user.setUserRole(UserRole.USER);
+        user.setUserStatus(UserStatus.ACTIVE);
+        user = userDao.addUser(user);
         eventDao.sendEvent(user, EventType.REGISTERED, "New user registered in this chat", ip);
         return user;
     }

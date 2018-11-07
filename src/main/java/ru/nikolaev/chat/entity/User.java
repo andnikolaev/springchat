@@ -1,28 +1,26 @@
 package ru.nikolaev.chat.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.nikolaev.chat.enums.UserRole;
 import ru.nikolaev.chat.enums.UserStatus;
 
-import javax.annotation.PostConstruct;
+import java.sql.Timestamp;
 
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "password")
 @EqualsAndHashCode(of = "id")
 public class User {
 
     private long id;
     private String name;
-
+    @JsonIgnore
+    private String password;
     private UserStatus userStatus;
     private UserRole userRole;
-
     @JsonIgnore
     private String ip;
 
@@ -30,8 +28,4 @@ public class User {
         this.id = id;
     }
 
-    @PostConstruct
-    public void initRole() {
-        userRole = UserRole.ANONYMOUS;
-    }
 }

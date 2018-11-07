@@ -13,10 +13,8 @@ import ru.nikolaev.chat.enums.UserRole;
 import ru.nikolaev.chat.web.service.AuthService;
 import ru.nikolaev.chat.web.storage.OnlineUser;
 import ru.nikolaev.chat.web.storage.OnlineUserManager;
-import ru.nikolaev.chat.web.storage.OnlineUserSessionStorage;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController

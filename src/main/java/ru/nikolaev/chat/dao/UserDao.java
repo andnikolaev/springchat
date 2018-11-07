@@ -6,14 +6,14 @@ import java.util.List;
 
 public interface UserDao {
 
-    int addUser(String name, String password);
+    User addUser(User user);
+
+    User updateUser(User user);
 
     User checkAuth(String name, String password);
 
-    void logout(User user);
-
     User getUserByName(String name);
 
-    List<User> getAllLoggedUsers();
+    User getUserById(long id);
 
 }

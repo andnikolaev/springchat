@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.nikolaev.chat.annotation.Permission;
 import ru.nikolaev.chat.dao.dto.MessageDto;
 import ru.nikolaev.chat.enums.UserRole;
-import ru.nikolaev.chat.web.UserSession;
 import ru.nikolaev.chat.web.service.MessageService;
+import ru.nikolaev.chat.web.storage.OnlineUser;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/api/messages")
 public class MessageController {
     @Autowired
-    private UserSession userSession;
+    private OnlineUser onlineUser;
     @Autowired
     private MessageService messageService;
 
@@ -23,7 +23,7 @@ public class MessageController {
     @Permission(role = {UserRole.ADMIN, UserRole.USER})
     @ResponseStatus(HttpStatus.OK)
     public void sendMessage(@RequestBody MessageDto messageDto, HttpServletRequest httpServletRequest) {
-        messageService.sendMessage(userSession.getUser().getId(), messageDto.getText(), httpServletRequest.getRemoteAddr());
+        messageService.sendMessage(onlineUser.getUser().getId(), messageDto.getText(), httpServletRequest.getRemoteAddr());
     }
 
     @GetMapping

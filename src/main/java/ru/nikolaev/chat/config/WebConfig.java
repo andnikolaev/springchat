@@ -1,5 +1,6 @@
 package ru.nikolaev.chat.config;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -37,7 +38,6 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/").setViewName("home");
     }
 
-
     @Bean
     public UserPermissionInterceptor userPermissionInterceptor() {
         return new UserPermissionInterceptor();
@@ -52,6 +52,14 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         registry.jsp("/WEB-INF/views/", ".jsp");
+    }
+
+    @Bean
+    @Scope("prototype")
+    public User user() {
+        User user = new User();
+        user.setUserRole(UserRole.ANONYMOUS);
+        return user;
     }
 
 }

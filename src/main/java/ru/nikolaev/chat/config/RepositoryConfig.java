@@ -47,11 +47,5 @@ public class RepositoryConfig {
     public JdbcTemplate getJdbcTemplate(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
-
-    @Bean
-    @Autowired
-    public PlatformTransactionManager txManager(DataSource dataSource) {
-        return new DataSourceTransactionManager(dataSource);
-    }
-
+    
 }

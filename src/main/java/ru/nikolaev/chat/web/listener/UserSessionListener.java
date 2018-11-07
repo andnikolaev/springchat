@@ -2,7 +2,6 @@ package ru.nikolaev.chat.web.listener;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import ru.nikolaev.chat.web.storage.OnlineUserSessionStorage;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
@@ -20,7 +19,7 @@ public class UserSessionListener implements HttpSessionListener {
         ApplicationContext ctx =
                 WebApplicationContextUtils.
                         getWebApplicationContext(session.getServletContext());
-        OnlineUserSessionStorage onlineUserSessionStorage = (OnlineUserSessionStorage) ctx.getBean("storage");
-        onlineUserSessionStorage.removeUserSession(session);
+
+
     }
 }
