@@ -9,14 +9,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-public class  UserMapper implements RowMapper<User> {
+public class UserRowMapper implements RowMapper<User> {
     @Override
     public User mapRow(ResultSet rs, int rowNum) throws SQLException {
         User user = new User();
-        user.setId(rs.getLong("id"));
-        user.setName(rs.getString("name"));
-        user.setUserRole(UserRole.getEventTypeById(rs.getInt("role_id")));
-        user.setUserStatus(UserStatus.getUserStatusById(rs.getInt("status_id")));
+        user.setId(rs.getLong("ID"));
+        user.setName(rs.getString("NAME"));
+        user.setUserRole(UserRole.getEventTypeById(rs.getInt("ROLE_ID")));
+        user.setUserStatus(UserStatus.getUserStatusById(rs.getInt("STATUS_ID")));
         return user;
     }
 }

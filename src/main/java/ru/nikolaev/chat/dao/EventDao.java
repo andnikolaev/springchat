@@ -7,9 +7,14 @@ import ru.nikolaev.chat.entity.User;
 import java.util.List;
 
 public interface EventDao {
-    int sendEvent(User owner, EventType eventType, String message, String ip);
-
-    int sendEvent(User owner, EventType eventType, String message, String ip, User assignee);
 
     List<Event> getLastEvents(int count);
+
+    List<Event> getLastEventsByType(EventType eventType, int count);
+
+    Event getEventById(long id);
+
+    Event sendEvent(Event event);
+
+    Event getLastEventForUser(long userId);
 }
