@@ -16,7 +16,7 @@ import ru.nikolaev.chat.exception.UserAlreadyExistException;
 @Service
 public class AuthService {
     @Autowired
-    private EventDao eventDao;
+    private EventService eventSevice;
     @Autowired
     private UserDao userDao;
 
@@ -32,17 +32,17 @@ public class AuthService {
         user.setUserRole(UserRole.USER);
         user.setUserStatus(UserStatus.ACTIVE);
         user = userDao.addUser(user);
-        eventDao.sendEvent(user, EventType.REGISTERED, "New user registered in this chat", ip);
+        eventSevice.sendEvent(user, EventType.REGISTERED, ip);
         return user;
     }
 
     public User login(String name, String password, String ip) {
         User user = userDao.checkAuth(name, password);
-        eventDao.sendEvent(user, EventType.LOGIN, "User login in this chat", ip);
+        eventSevice.sendEvent(user, EventType.LOGIN, ip);
         return user;
     }
 
     public void logout(User user, String ip) {
-        eventDao.sendEvent(user, EventType.LOGOUT, "User logout from this chat", ip);
+        eventSevice.sendEvent(user, EventType.LOGOUT, ip);
     }
 }
