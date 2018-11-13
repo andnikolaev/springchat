@@ -40,7 +40,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    @Permission(role = UserRole.ANONYMOUS, exception = ChatExceptionEnum.USER_EXIST)
+    @Permission(role = UserRole.ANONYMOUS)
     public User registerUser(@Valid @RequestBody AuthUserDto userDto, Errors validationErrors, HttpServletRequest httpServletRequest) {
         if (validationErrors.hasErrors()) {
             new ExceptionThrower(new BadRequestDataException()).addValidationsError(validationErrors).throwException();
@@ -58,7 +58,7 @@ public class UserController {
 
     @PostMapping("/{id}/session")
     public void updateUserStatus(@PathVariable long id, @RequestBody UserStatusDto userStatusDto, HttpServletRequest httpServletRequest) {
-      
+
     }
 
 

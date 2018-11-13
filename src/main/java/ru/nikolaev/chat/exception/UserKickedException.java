@@ -1,4 +1,4 @@
 package ru.nikolaev.chat.exception;
 
-public class UserKickedException {
+public class UserKickedException extends ChatException {
 }

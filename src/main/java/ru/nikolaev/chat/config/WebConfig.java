@@ -10,6 +10,7 @@ import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.enums.UserRole;
+import ru.nikolaev.chat.web.interceptor.UpdateCurrentOnlineUserInterceptor;
 import ru.nikolaev.chat.web.interceptor.UserAuthenticationInterceptor;
 import ru.nikolaev.chat.web.interceptor.UserPermissionInterceptor;
 
@@ -39,14 +40,25 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
+    public UpdateCurrentOnlineUserInterceptor updateCurrentOnlineUserInterceptor() {
+        return new UpdateCurrentOnlineUserInterceptor();
+    }
+
+    @Bean
     public UserPermissionInterceptor userPermissionInterceptor() {
         return new UserPermissionInterceptor();
     }
 
+    @Bean
+    public UserAuthenticationInterceptor userAuthenticationInterceptor() {
+        return new UserAuthenticationInterceptor();
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(updateCurrentOnlineUserInterceptor());
         registry.addInterceptor(userPermissionInterceptor());
-        registry.addInterceptor(new UserAuthenticationInterceptor());
+        registry.addInterceptor(userAuthenticationInterceptor());
     }
 
     @Override

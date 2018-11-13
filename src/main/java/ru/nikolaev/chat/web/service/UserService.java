@@ -16,7 +16,12 @@ public class UserService {
     @Autowired
     private UserDao userDao;
 
-       @Autowired
-    private EventDao eventDao;
+    @Autowired
+    private EventService eventService;
 
+
+    public User getUserWithActualData(User user) {
+        User currentUser = userDao.getUserById(user.getId());
+        return currentUser;
+    }
 }

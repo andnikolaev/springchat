@@ -44,4 +44,8 @@ public class EventService {
         event = eventDao.sendEvent(event);
         return event;
     }
+
+    public Event getLastEventForUser(User user) {
+        return eventDao.getLastEventForUser(user.getId());
+    }
 }

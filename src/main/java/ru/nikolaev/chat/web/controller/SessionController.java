@@ -35,8 +35,8 @@ public class SessionController {
         String name = userDto.getName();
         String password = DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes());
         User user = authService.login(name, password, httpServletRequest.getRemoteAddr());
-        BeanUtils.copyProperties(user, onlineUser);
-        onlineUserManager.addUser(onlineUser);
+        onlineUser.setUser(user);
+        onlineUserManager.addUser(user);
         return user;
     }
 
@@ -44,13 +44,16 @@ public class SessionController {
     @Permission(role = {UserRole.ADMIN, UserRole.USER})
     @ResponseStatus(HttpStatus.OK)
     public void logout(HttpServletRequest httpServletRequest) {
-        // authService.logout(userSession.getUser(), httpServletRequest.getRemoteAddr());
+        User logoutUser = onlineUser.getUser();
+        authService.logout(logoutUser, httpServletRequest.getRemoteAddr());
+        onlineUserManager.removeUser(logoutUser);
         httpServletRequest.getSession().invalidate();
-        onlineUserManager.removeUser(onlineUser);
     }
 
     @GetMapping
-    public List<OnlineUser> getOnlineUsers() {
+    public List<User> getOnlineUsers() {
         return onlineUserManager.getUsers();
     }
+
+
 }

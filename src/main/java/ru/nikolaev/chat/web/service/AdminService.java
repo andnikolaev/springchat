@@ -14,7 +14,7 @@ public class AdminService {
 
 
     public void kickUser(long ownerId, long kickedUserId, String ownerIp) {
-        eventDao.sendEvent(new User(ownerId), EventType.KICKED, "User was kicked from this chat", ownerIp, new User(kickedUserId));
+       // eventDao.sendEvent(new User(ownerId), EventType.KICKED, "User was kicked from this chat", ownerIp, new User(kickedUserId));
     }
 
     public void banUser(long ownerId, long banedUserId, String ownerIp) {
@@ -26,6 +26,6 @@ public class AdminService {
     }
 
     public void updateUserStatus(long adminId, long userId, EventType eventType, UserStatus userStatus, String adminIp) {
-        eventDao.sendEvent(new User(adminId), eventType, "User was kicked from this chat", adminIp, new User(userId));
+      //  eventDao.sendEvent(new User(adminId), eventType, "User was kicked from this chat", adminIp, new User(userId));
     }
 }

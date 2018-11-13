@@ -30,6 +30,9 @@ public class UserPermissionInterceptor implements HandlerInterceptor {
                     }
                 }
 //                Arrays.stream(methodPermissionAnnotation.role()).anyMatch(x -> x.equals(user.getUserRole()));
+                if (!result) {
+                    throw methodPermissionAnnotation.exception().getChatException();
+                }
                 System.out.println(methodPermissionAnnotation);
             } else {
                 result = true;

@@ -5,9 +5,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.ModelAndView;
-import ru.nikolaev.chat.exception.BadRequestDataException;
-import ru.nikolaev.chat.exception.UserAlreadyExistException;
+import ru.nikolaev.chat.exception.*;
 
 import java.util.List;
 
@@ -27,5 +25,34 @@ public class ChatControllerAdvice {
     List<String> processExceptionHandler(UserAlreadyExistException ex) {
         ex.addError("userExist");
         return ex.getErrorList();
+    }
+
+    @ExceptionHandler({UserLoginFailedException.class})
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    List<String> processExceptionHandler(UserLoginFailedException ex) {
+        ex.addError("userNotFound");
+        return ex.getErrorList();
+    }
+
+    @ExceptionHandler({UserKickedException.class})
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    List<String> processExceptionHandler(UserKickedException ex) {
+        ex.addError("userKicked");
+        return ex.getErrorList();
+    }
+
+    @ExceptionHandler({UserBannedException.class})
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    List<String> processExceptionHandler(UserBannedException ex) {
+        ex.addError("userBanned");
+        return ex.getErrorList();
+    }
+
+    @ExceptionHandler({AccessDeniedException.class})
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    void processExceptionHandler(AccessDeniedException ex) {
     }
 }

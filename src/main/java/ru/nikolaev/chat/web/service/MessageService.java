@@ -15,7 +15,7 @@ public class MessageService {
     private EventDao eventDao;
 
     public void sendMessage(long ownerId, String message, String ip) {
-        eventDao.sendEvent(new User(ownerId), EventType.MESSAGE, message, ip);
+     //   eventDao.sendEvent(new User(ownerId), EventType.MESSAGE, message, ip);
     }
 
     public List<Message> getLastMessages(int count) {
