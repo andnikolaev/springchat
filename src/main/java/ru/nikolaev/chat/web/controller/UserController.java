@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.nikolaev.chat.annotation.Permission;
 import ru.nikolaev.chat.dao.dto.AuthUserDto;
 import ru.nikolaev.chat.dao.dto.UserStatusDto;
+import ru.nikolaev.chat.entity.Event;
 import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.enums.EventType;
 import ru.nikolaev.chat.enums.UserRole;
@@ -52,14 +53,18 @@ public class UserController {
         return user;
     }
 
+    @Permission(role = UserRole.ADMIN)
     @DeleteMapping("/{id}/session")
-    public void kickUser(@PathVariable long id, HttpServletRequest httpServletRequest) {
-
+    public Event kickUser(@PathVariable long id, HttpServletRequest httpServletRequest) {
+        Event event = adminService.kickUser(onlineUser.getUser(), id, httpServletRequest.getRemoteAddr());
+        return event;
     }
 
+    @Permission(role = UserRole.ADMIN)
     @PostMapping("/{id}/session")
-    public void updateUserStatus(@PathVariable long id, @RequestBody UserStatusDto userStatusDto, HttpServletRequest httpServletRequest) {
-
+    public User updateUserStatus(@PathVariable long id, @RequestBody UserStatusDto userStatusDto, HttpServletRequest httpServletRequest) {
+        User user = adminService.updateUserStatus(onlineUser.getUser(), id, userStatusDto.getStatusId(), httpServletRequest.getRemoteAddr());
+        return user;
     }
 
     @GetMapping("/session")

@@ -3,6 +3,8 @@ package ru.nikolaev.chat.web.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.nikolaev.chat.dao.EventDao;
+import ru.nikolaev.chat.dao.UserDao;
+import ru.nikolaev.chat.entity.Event;
 import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.enums.EventType;
 import ru.nikolaev.chat.enums.UserStatus;
@@ -10,22 +12,41 @@ import ru.nikolaev.chat.enums.UserStatus;
 @Service
 public class AdminService {
     @Autowired
-    private EventDao eventDao;
+    private EventService eventService;
+
+    @Autowired
+    private UserDao userDao;
 
 
-    public void kickUser(long ownerId, long kickedUserId, String ownerIp) {
-       // eventDao.sendEvent(new User(ownerId), EventType.KICKED, "User was kicked from this chat", ownerIp, new User(kickedUserId));
+    public Event kickUser(User owner, long kickedUserId, String ownerIp) {
+        return eventService.sendEvent(owner, new User(kickedUserId), EventType.KICKED, ownerIp);
     }
 
-    public void banUser(long ownerId, long banedUserId, String ownerIp) {
-        updateUserStatus(ownerId, banedUserId, EventType.BANNED, UserStatus.BANNED, ownerIp);
+    public User banUser(User owner, long banedUserId, String ownerIp) {
+        User bannedUser = userDao.getUserById(banedUserId);
+        bannedUser.setUserStatus(UserStatus.BANNED);
+        userDao.updateUser(owner);
+        eventService.sendEvent(owner, new User(banedUserId), EventType.BANNED, ownerIp);
+        return userDao.getUserById(banedUserId);
     }
 
-    public void deleteUser(long ownerId, long banedUserId, String ownerIp) {
-        updateUserStatus(ownerId, banedUserId, EventType.DELETED, UserStatus.DELETED, ownerIp);
+    public User deleteUser(User owner, long deletedUserId, String ownerIp) {
+        User bannedUser = userDao.getUserById(deletedUserId);
+        bannedUser.setUserStatus(UserStatus.DELETED);
+        userDao.updateUser(owner);
+        eventService.sendEvent(owner, new User(deletedUserId), EventType.DELETED, ownerIp);
+        return userDao.getUserById(deletedUserId);
     }
 
-    public void updateUserStatus(long adminId, long userId, EventType eventType, UserStatus userStatus, String adminIp) {
-      //  eventDao.sendEvent(new User(adminId), eventType, "User was kicked from this chat", adminIp, new User(userId));
+    public User updateUserStatus(User user, long id, int statusId, String ownerIp) {
+        User updatedUser = null;
+        UserStatus userStatus = UserStatus.getUserStatusById(statusId);
+        if (UserStatus.BANNED.equals(userStatus)) {
+            updatedUser = banUser(user, id, ownerIp);
+        } else if (UserStatus.DELETED.equals(userStatus)) {
+            updatedUser = deleteUser(user, id, ownerIp);
+        }
+
+        return updatedUser;
     }
 }
