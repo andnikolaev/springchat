@@ -18,6 +18,7 @@ import ru.nikolaev.chat.exception.ChatExceptionEnum;
 import ru.nikolaev.chat.exception.ExceptionThrower;
 import ru.nikolaev.chat.web.service.AdminService;
 import ru.nikolaev.chat.web.service.AuthService;
+import ru.nikolaev.chat.web.storage.OnlineUser;
 import ru.nikolaev.chat.web.storage.OnlineUserManager;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +30,7 @@ import javax.validation.Valid;
 public class UserController {
 
     @Autowired
-    private OnlineUserManager onlineUserManager;
+    private OnlineUser onlineUser;
 
     @Autowired
     private AuthService authService;
@@ -61,5 +62,9 @@ public class UserController {
 
     }
 
-
+    @GetMapping("/session")
+    @Permission(role = {UserRole.USER, UserRole.ADMIN})
+    public User getCurrentUser() {
+        return onlineUser.getUser();
+    }
 }

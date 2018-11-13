@@ -15,7 +15,7 @@ public enum UserRole {
         return this.id;
     }
 
-    public static UserRole getEventTypeById(int id) {
+    public static UserRole getUserRoleById(int id) {
         for (UserRole userRole : values()) {
             if (userRole.id == id) {
                 return userRole;

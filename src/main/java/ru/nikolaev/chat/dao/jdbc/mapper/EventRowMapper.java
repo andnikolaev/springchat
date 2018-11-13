@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.RowMapper;
 import ru.nikolaev.chat.entity.Event;
 import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.enums.EventType;
+import ru.nikolaev.chat.enums.UserRole;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,6 +21,7 @@ public class EventRowMapper implements RowMapper<Event> {
             User owner = new User();
             owner.setId(ownerId);
             owner.setName(rs.getString("OWNER_NAME"));
+            owner.setUserRole(UserRole.getUserRoleById(rs.getInt("OWNER_ROLE")));
             event.setOwner(owner);
         }
         long assigneeId = rs.getLong("ASSIGNEE_ID");

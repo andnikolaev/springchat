@@ -5,11 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.nikolaev.chat.annotation.Permission;
 import ru.nikolaev.chat.dao.dto.MessageDto;
+import ru.nikolaev.chat.entity.Event;
 import ru.nikolaev.chat.enums.UserRole;
 import ru.nikolaev.chat.web.service.MessageService;
 import ru.nikolaev.chat.web.storage.OnlineUser;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/messages")
@@ -22,13 +24,14 @@ public class MessageController {
     @PostMapping
     @Permission(role = {UserRole.ADMIN, UserRole.USER})
     @ResponseStatus(HttpStatus.OK)
-    public void sendMessage(@RequestBody MessageDto messageDto, HttpServletRequest httpServletRequest) {
-        messageService.sendMessage(onlineUser.getUser().getId(), messageDto.getText(), httpServletRequest.getRemoteAddr());
+    public Event sendMessage(@RequestBody MessageDto messageDto, HttpServletRequest httpServletRequest) {
+        Event event = messageService.sendMessage(onlineUser.getUser(), messageDto.getText(), httpServletRequest.getRemoteAddr());
+        return event;
     }
 
     @GetMapping
-    public String getOnlineUsers() {
+    public List<Event> getLastMessages() {
         //TODO убрать хардкод 20 и сделать получение и дефолтное значение
-        return messageService.getLastMessages(20).toString();
+        return messageService.getLastMessages(20);
     }
 }

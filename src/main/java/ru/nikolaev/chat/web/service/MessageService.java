@@ -3,6 +3,7 @@ package ru.nikolaev.chat.web.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.nikolaev.chat.dao.EventDao;
+import ru.nikolaev.chat.entity.Event;
 import ru.nikolaev.chat.enums.EventType;
 import ru.nikolaev.chat.entity.Message;
 import ru.nikolaev.chat.entity.User;
@@ -14,12 +15,15 @@ public class MessageService {
     @Autowired
     private EventDao eventDao;
 
-    public void sendMessage(long ownerId, String message, String ip) {
-     //   eventDao.sendEvent(new User(ownerId), EventType.MESSAGE, message, ip);
+    @Autowired
+    private EventService eventService;
+
+    public Event sendMessage(User owner, String message, String ip) {
+        return eventService.sendEvent(owner, EventType.MESSAGE, message, ip);
     }
 
-    public List<Message> getLastMessages(int count) {
-        List<Message> messageList = null;
+    public List<Event> getLastMessages(int count) {
+        List<Event> messageList = eventDao.getLastEventsByType(EventType.MESSAGE, count);
         return messageList;
     }
 }

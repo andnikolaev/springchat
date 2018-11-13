@@ -25,8 +25,6 @@ public class UserAuthenticationInterceptor implements HandlerInterceptor {
     private OnlineUser onlineUser;
 
     @Autowired
-    private OnlineUserManager onlineUserManager;
-
     private EventService eventService;
 
     @Override
