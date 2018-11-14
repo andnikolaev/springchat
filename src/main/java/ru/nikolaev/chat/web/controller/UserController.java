@@ -28,6 +28,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(value = "/api/users")
 @Slf4j
+@CrossOrigin
 public class UserController {
 
     @Autowired

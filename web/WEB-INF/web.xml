@@ -7,4 +7,6 @@
     <listener>
         <listener-class>ru.nikolaev.chat.web.listener.UserSessionListener</listener-class>
     </listener>
+
+    
 </web-app>
