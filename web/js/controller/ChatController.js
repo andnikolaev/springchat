@@ -21,7 +21,7 @@ ChatController.prototype.loadPage = function () {
     var that = this;
     var path = window.location.pathname;
     if (isLoginPath(path)) {
-        that._model.loginPageLoad();
+        that._model.loadLoginPage();
     }
 
     if (isRegistrationPath(path)) {

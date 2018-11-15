@@ -38,7 +38,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/login")
                 .setViewName("forward:/index.html");
-
+        registry.addViewController("/registration")
+                .setViewName("forward:/index.html");
     }
 
     @Bean
