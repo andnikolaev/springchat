@@ -11,7 +11,10 @@ function ChatModel() {
     this.onPageLoadUser = new EventEmitter();
     this.onPageLoadMessageInput = new EventEmitter();
     this.onLogout = new EventEmitter();
+    this.onRegistration = new EventEmitter();
     this.onLogin = new EventEmitter();
+    this.onLoginPageLoad = new EventEmitter();
+    this.onRegistrationPageLoad = new EventEmitter();
     this.onError = new EventEmitter();
 }
 
@@ -41,6 +44,15 @@ ChatModel.prototype.pageLoad = function () {
     });
 };
 
+ChatModel.prototype.loadLoginPage = function () {
+    this.onLoginPageLoad.notify();
+};
+
+ChatModel.prototype.loadRegistrationPage = function () {
+    this.onRegistrationPageLoad.notify();
+};
+
+
 ChatModel.prototype.login = function () {
     var that = this;
     this._auth.login().then(function (value) {
@@ -49,6 +61,15 @@ ChatModel.prototype.login = function () {
         console.dir(reason);
     })
 
+};
+
+ChatModel.prototype.registration = function () {
+    var that = this;
+    this._auth.registration().then(function (value) {
+        that.onRegistration.notify(value);
+    }).catch(function (reason) {
+        console.dir(reason);
+    });
 };
 
 ChatModel.prototype.logout = function () {

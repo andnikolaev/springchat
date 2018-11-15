@@ -28,6 +28,14 @@ ChatView.prototype.init = function (user) {
         that.updateMessageInput(user);
     });
 
+    that._model.onLoginPageLoad.subscribe(function (user) {
+        that.loginPageLoad(user);
+    });
+
+    that._model.onRegistrationPageLoad.subscribe(function (user) {
+        that.registrationPageLoad(user);
+    });
+
     that._model.onLogin.subscribe(function (user) {
         that.login(user);
     });
@@ -59,10 +67,10 @@ ChatView.prototype.updateCurrentUserHeader = function (user) {
         var authHeaderView = new AuthHeaderView();
         header = authHeaderView.renderAuthHeader();
         header.getElementsByClassName("login")[0].addEventListener('click', function (evt) {
-            that._controller.login();
+            that._controller.loadLoginPage();
         });
         header.getElementsByClassName("register")[0].addEventListener('click', function (evt) {
-            that._controller.register();
+            that._controller.loadRegistrationPage();
         });
     } else {
         var userNameHeaderView = new UserNameHeaderView();
@@ -87,13 +95,41 @@ ChatView.prototype.updateMessageInput = function (user) {
 };
 
 
-ChatView.prototype.login = function (user) {
-    console.log("LOGIN SUCEES");
+ChatView.prototype.login = function () {
+    var modal = document.getElementById('myModal');
+    modal.style.display = "none";
+    history.pushState(null, null, '/chat');
     this._controller.loadPage();
 };
 
-ChatView.prototype.logout = function (user) {
-    console.log("LOGOUT SUCEES");
+ChatView.prototype.logout = function () {
     this._controller.loadPage();
 };
 
+ChatView.prototype.loginPageLoad = function () {
+    var that = this;
+    var modal = document.getElementById('myModal');
+    modal.style.display = "block";
+    document.getElementById("submit-login").addEventListener("click", function (ev) {
+        that._controller.login();
+    });
+    var span = document.getElementsByClassName("close")[0];
+    span.addEventListener("click", function () {
+        modal.style.display = "none";
+        history.pushState(null, null, '/chat');
+    });
+};
+
+ChatView.prototype.registrationPageLoad = function () {
+    var that = this;
+    var modal = document.getElementById('myModal');
+    modal.style.display = "block";
+    document.getElementById("submit-login").addEventListener("click", function (ev) {
+        that._controller.registration();
+    });
+    var span = document.getElementsByClassName("close")[0];
+    span.addEventListener("click", function () {
+        modal.style.display = "none";
+        history.pushState(null, null, '/chat');
+    });
+};

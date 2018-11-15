@@ -15,5 +15,5 @@ MessageView.prototype.renderMessagesView = function (messages) {
 MessageView.prototype.renderMessage = function (message) {
     var messageInfo = document.createElement('div');
     messageInfo.classList.add('message_info');
-
+    return messageInfo;
 };

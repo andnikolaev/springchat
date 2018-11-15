@@ -20,6 +20,12 @@ Auth.prototype.login = function () {
     });
 };
 
+Auth.prototype.registration = function () {
+    return new Promise(function (resolve, reject) {
+
+    });
+};
+
 Auth.prototype.logout = function () {
     return new Promise(function (resolve, reject) {
         $.ajax({
