@@ -27,9 +27,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
-        registry.addResourceHandler("/as/**").addResourceLocations("/resour/**");
-        registry.addResourceHandler("/asd/**").addResourceLocations("/front/**");
-        registry.addResourceHandler("/test").addResourceLocations("/front/index.html");
     }
 
     @Override
@@ -39,7 +36,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-    //    registry.addViewController("/").setViewName("home");
+        registry.addViewController("/login")
+                .setViewName("forward:/index.html");
+
     }
 
     @Bean
@@ -59,9 +58,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(updateCurrentOnlineUserInterceptor());
-        registry.addInterceptor(userPermissionInterceptor());
-        registry.addInterceptor(userAuthenticationInterceptor());
+        registry.addInterceptor(updateCurrentOnlineUserInterceptor()).addPathPatterns("/api/**");
+        registry.addInterceptor(userPermissionInterceptor()).addPathPatterns("/api/**");
+        registry.addInterceptor(userAuthenticationInterceptor()).addPathPatterns("/api/**");
     }
 
     @Bean

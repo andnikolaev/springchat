@@ -13,7 +13,7 @@ Auth.prototype.login = function () {
             success: function (data) {
                 resolve(data);
             },
-            failure: function (errMsg) {
+            error: function (errMsg) {
                 reject(errMsg);
             }
         });
@@ -29,7 +29,7 @@ Auth.prototype.logout = function () {
             success: function (data) {
                 resolve(data);
             },
-            failure: function (errMsg) {
+            error: function (errMsg) {
                 reject(errMsg);
             }
         });

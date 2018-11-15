@@ -25,14 +25,30 @@
 <!--</form>-->
 
 <h1>Java Chat</h1>
+<div id="myModal" class="modal">
 
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2>Sign in</h2>
+        </div>
+        <div class="modal-body">
+            <form id="addBookForm" action="">
+                <label for="userName">Name:</label><br>
+                <input name="name" id="userName" type="text" value="">
+                <br>
+                <label for="userPassword">Name:</label><br>
+                <input name="password" id="userPassword" type="text" value="">
+                <br>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+
+</div>
 <section>
-    <p>
-        Hello, <span id="current_name">Andrey</span>
-    </p>
-    <div>
-        <span id="login">Вход</span>
-        <span id="logout">Выход</span>
+    <div class="user-header">
     </div>
     <div class="panel panel-primary ppanel-left">
         <div class="panel-heading">
@@ -72,6 +88,8 @@
 <script src="js/model/ChatModel.js"></script>
 <script src="js/model/Auth.js"></script>
 <script src="js/view/UsersView.js"></script>
+<script src="js/view/ModalView.js"></script>
+<script src="js/view/AuthHeaderView.js"></script>
 <script src="js/view/UserNameHeaderView.js"></script>
 <script src="js/view/MessagesView.js"></script>
 <script src="js/view/ChatView.js"></script>

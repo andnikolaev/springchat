@@ -19,6 +19,11 @@ public class ChatControllerAdvice {
         return ex.getErrorList();
     }
 
+    List<String> processExceptionHandler(UserAlreadyLoginException ex) {
+        ex.addError("youAlreadyLogin");
+        return ex.getErrorList();
+    }
+
     @ExceptionHandler({UserAlreadyExistException.class})
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
@@ -53,6 +58,8 @@ public class ChatControllerAdvice {
 
     @ExceptionHandler({AccessDeniedException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    void processExceptionHandler(AccessDeniedException ex) {
+    @ResponseBody
+    List<String> processExceptionHandler(AccessDeniedException ex) {
+        return ex.getErrorList();
     }
 }

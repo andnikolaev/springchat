@@ -10,6 +10,8 @@ import ru.nikolaev.chat.annotation.Permission;
 import ru.nikolaev.chat.dao.dto.AuthUserDto;
 import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.enums.UserRole;
+import ru.nikolaev.chat.exception.ChatExceptionEnum;
+import ru.nikolaev.chat.exception.UserAlreadyExistException;
 import ru.nikolaev.chat.web.service.AuthService;
 import ru.nikolaev.chat.web.storage.OnlineUser;
 import ru.nikolaev.chat.web.storage.OnlineUserManager;
@@ -29,7 +31,7 @@ public class SessionController {
     private AuthService authService;
 
     @PostMapping
-    @Permission(role = UserRole.ANONYMOUS)
+    @Permission(role = UserRole.ANONYMOUS, exception = ChatExceptionEnum.USER_ALREADY_LOGIN)
     @ResponseStatus(HttpStatus.OK)
     public User login(@RequestBody AuthUserDto userDto, HttpServletRequest httpServletRequest) {
         String name = userDto.getName();
