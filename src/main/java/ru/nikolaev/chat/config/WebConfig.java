@@ -25,14 +25,11 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**");
-
-    }
-
-    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+        registry.addResourceHandler("/as/**").addResourceLocations("/resour/**");
+        registry.addResourceHandler("/asd/**").addResourceLocations("/front/**");
+        registry.addResourceHandler("/test").addResourceLocations("/front/index.html");
     }
 
     @Override
@@ -42,7 +39,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("home");
+    //    registry.addViewController("/").setViewName("home");
     }
 
     @Bean
@@ -65,11 +62,6 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(updateCurrentOnlineUserInterceptor());
         registry.addInterceptor(userPermissionInterceptor());
         registry.addInterceptor(userAuthenticationInterceptor());
-    }
-
-    @Override
-    public void configureViewResolvers(ViewResolverRegistry registry) {
-        registry.jsp("/WEB-INF/views/", ".jsp");
     }
 
     @Bean

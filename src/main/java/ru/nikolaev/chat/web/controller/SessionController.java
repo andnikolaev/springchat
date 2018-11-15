@@ -28,7 +28,6 @@ public class SessionController {
     @Autowired
     private AuthService authService;
 
-    @CrossOrigin
     @PostMapping
     @Permission(role = UserRole.ANONYMOUS)
     @ResponseStatus(HttpStatus.OK)
