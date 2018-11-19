@@ -24,9 +24,9 @@ UsersView.prototype.renderElement = function (user, currentUser) {
         element.classList.add('list-group-item-danger');
     } else if (user.getUserRole().toUpperCase() === 'USER'.toUpperCase()) {
         element.classList.add('list-group-item-success');
-        if (currentUser !== undefined && currentUser['userRole'].toUpperCase() === "ADMIN".toUpperCase()) {
-            element.textContent += "saddas";
-        }
+        // if (currentUser !== undefined && currentUser['userRole'].toUpperCase() === "ADMIN".toUpperCase()) {
+        //     element.textContent += "saddas";
+        // }
     }
     return element;
 };

@@ -74,7 +74,7 @@ ChatView.prototype.init = function (user) {
 ChatView.prototype.updateUserList = function (userList, currentUser) {
     var usersView = new UsersView();
     //TODO Притащить сюда текущего пользователя!!!!!!!!!!!!!!!!
-    var renderedUsersVies = usersView.renderUsersView(userList, user);
+    var renderedUsersVies = usersView.renderUsersView(userList);
     var userListContainer = document.getElementById('user-list-container');
     userListContainer.innerHTML = "";
     userListContainer.appendChild(renderedUsersVies);
