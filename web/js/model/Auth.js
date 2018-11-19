@@ -3,13 +3,15 @@ function Auth() {
 }
 
 Auth.prototype.login = function () {
+    var name = $("#userName").val();
+    var password = $("#userPassword").val();
     return new Promise(function (resolve, reject) {
         $.ajax({
             type: "POST",
-            url: "http://localhost:8090/chat/api/sessions",
+            url: "/chat/api/sessions",
             contentType: "application/json",
             dataType: "json",
-            data: JSON.stringify({"name": "An1sd", "password": "123"}),
+            data: JSON.stringify({"name": name, "password": password}),
             success: function (data) {
                 resolve(data);
             },
@@ -21,8 +23,22 @@ Auth.prototype.login = function () {
 };
 
 Auth.prototype.registration = function () {
+    var name = $("#userName").val();
+    var password = $("#userPassword").val();
     return new Promise(function (resolve, reject) {
-
+        $.ajax({
+            type: "POST",
+            url: "/chat/api/users",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({"name": name, "password": password}),
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (errMsg) {
+                reject(errMsg);
+            }
+        });
     });
 };
 

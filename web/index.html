@@ -8,41 +8,11 @@
           href="bootstrap/css/bootstrap.min.css"/>
 </head>
 <body>
-<!--<form class="login_form" method="post" action="chat_controller">-->
-<!--<h1>Форма входа в чат</h1>-->
-<!--<p>-->
-<!--<label for="name">Логин или email</label>-->
-<!--<input id="name" type="text" name="name" placeholder="Логин или email" required="true"/>-->
-<!--</p>-->
-<!--<p>-->
-<!--<label for="password">Пароль</label>-->
-<!--<input id="password" type="text" name="password" placeholder="Пароль" required="true"/>-->
-<!--</p>-->
-<!--<p>-->
-<!--<input type="submit" name="submit" value="Войти"/>-->
-<!--</p>-->
-<!--<br/>-->
-<!--</form>-->
 
 <h1>Java Chat</h1>
+<h3 id="chatError"></h3>
 <div id="myModal" class="modal">
 
-    <!-- Modal content -->
-    <div class="modal-content">
-        <div class="modal-header">
-            <span class="close">&times;</span>
-            <h2>Sign in</h2>
-        </div>
-        <div class="modal-body">
-            <label for="userName">Name:</label><br>
-            <input name="name" id="userName" type="text" value="">
-            <br>
-            <label for="userPassword">Name:</label><br>
-            <input name="password" id="userPassword" type="text" value="">
-            <br>
-            <input id="submit-login" type="submit" value="Submit">
-        </div>
-    </div>
 
 </div>
 <section>
@@ -55,17 +25,14 @@
         <div class="chat_messages panel-body" id="chat_mes">
         </div>
     </div>
-    <form method="post" action="chat_controller">
-        <div class="input-group ppanel-left">
-            <input type="hidden" name="cmd" value="send"/> <input type="text"
-                                                                  name="text" id="inputMsg" class="form-control"/>
-            <div class="input-group-btn">
-                <button class="btn-size btn btn-success " type="submit">
-                    <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-                </button>
-            </div>
+    <div class="input-group ppanel-left">
+        <input type="text" name="text" id="inputMsg" class="form-control"/>
+        <div class="input-group-btn">
+            <button class="btn-size btn btn-success btn-send" type="submit">
+                <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+            </button>
         </div>
-    </form>
+    </div>
     <div class="panel panel-primary ppanel-right">
         <div class="panel-heading">
             <h3 class="panel-title">Users</h3>
@@ -74,8 +41,8 @@
 
         </div>
     </div>
-
 </section>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="js/component/loader/CurrentUserLoader.js"></script>
 <script src="js/component/loader/MessageLoader.js"></script>
@@ -83,6 +50,7 @@
 <script src="js/component/Event.js"></script>
 <script src="js/component/EventEmitter.js"></script>
 <script src="js/component/User.js"></script>
+<script src="js/model/EventSender.js"></script>
 <script src="js/model/ChatModel.js"></script>
 <script src="js/model/Auth.js"></script>
 <script src="js/view/UsersView.js"></script>

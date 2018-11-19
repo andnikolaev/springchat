@@ -7,16 +7,23 @@ ChatController.prototype.start = function () {
     var that = this;
     var userLoader = new CurrentUserLoader();
     userLoader.loadUser().then(function (user) {
-        console.log("THEN");
         that._view.init(user);
     }).catch(function (reason) {
-        console.log("Catch");
         that._view.init();
     })
 };
 
+ChatController.prototype.getCurrentUser = function () {
+    var that = this;
+    var userLoader = new CurrentUserLoader();
+    return userLoader.loadUser().then(function (user) {
+        return user;
+    }).catch(function (reason) {
+        return null;
+    });
+};
+
 ChatController.prototype.loadPage = function () {
-    console.log("loadpage");
     this._model.pageLoad();
     var that = this;
     var path = window.location.pathname;
@@ -49,6 +56,15 @@ ChatController.prototype.loadPage = function () {
     }
 };
 
+ChatController.prototype.updateMessages = function () {
+    this._model.updateMessages();
+};
+
+ChatController.prototype.updateUsers = function () {
+    this._model.updateUsers();
+};
+
+
 ChatController.prototype.loadLoginPage = function () {
     this._model.loadLoginPage();
 };
@@ -69,3 +85,6 @@ ChatController.prototype.logout = function () {
     this._model.logout();
 };
 
+ChatController.prototype.sendMessage = function (message) {
+    this._model.sendMessage(message);
+};

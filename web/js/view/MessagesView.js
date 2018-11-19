@@ -8,7 +8,6 @@ MessageView.prototype.renderMessagesView = function (messages) {
     elements.innerHTML = "";
     messages.forEach(function (message) {
         var element = that.renderMessage(message);
-        console.log(element);
         elements.appendChild(that.renderMessage(message));
     });
 
@@ -43,7 +42,9 @@ MessageView.prototype.renderMessage = function (message) {
         spanTime.classList.add("label_info");
         spanTime.classList.add("label");
         spanTime.classList.add("label-default");
-        spanTime.innerText = message["_timestamp"];
+        var date = new Date();
+        date.setTime(message["_timestamp"]);
+        spanTime.innerText = date.toLocaleString();
         messageInfo.appendChild(spanTime);
         return messageInfo;
     }
@@ -52,6 +53,7 @@ MessageView.prototype.renderMessage = function (message) {
         var messageInfo = document.createElement('div');
         messageInfo.classList.add('well');
         messageInfo.classList.add('well-sm');
+
         switch (message['_eventType']) {
             case 'LOGIN':
                 messageInfo.innerText = message["_owner"]["name"] + " entered the chat.";
@@ -66,6 +68,7 @@ MessageView.prototype.renderMessage = function (message) {
                 messageInfo.innerText = message["_owner"]["name"] + " registered in chat;";
                 break;
             case 'KICKED':
+                console.dir(message);
                 messageInfo.innerText = message["_assignee"]["name"] + " was kicked by " + message["_owner"]["name"];
                 break;
             case 'BANNED':

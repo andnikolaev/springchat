@@ -7,18 +7,15 @@ UsersView.prototype.renderUsersView = function (users, currentUser) {
 
     var elements = document.createElement('div');
     elements.classList.add("list-group");
-    console.log("SADADDSADSDADASD" );
-    console.log(elements);
     users.forEach(function (user) {
-        elements.appendChild(that.renderElement(user));
+        elements.appendChild(that.renderElement(user, currentUser));
     });
 
 
     return elements;
 };
 
-UsersView.prototype.renderElement = function (user) {
-
+UsersView.prototype.renderElement = function (user, currentUser) {
     var element = document.createElement('a');
     element.href = '#';
     element.classList.add('list-group-item');
@@ -27,6 +24,9 @@ UsersView.prototype.renderElement = function (user) {
         element.classList.add('list-group-item-danger');
     } else if (user.getUserRole().toUpperCase() === 'USER'.toUpperCase()) {
         element.classList.add('list-group-item-success');
+        if (currentUser !== undefined && currentUser['userRole'].toUpperCase() === "ADMIN".toUpperCase()) {
+            element.textContent += "saddas";
+        }
     }
     return element;
 };

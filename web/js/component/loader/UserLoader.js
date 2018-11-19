@@ -6,7 +6,7 @@ UserLoader.prototype.loadUsers = function () {
     return new Promise(function (resolve, reject) {
         var users = [];
         $.ajax({
-            url: 'http://localhost:8090/chat/api/sessions',             // указываем URL и
+            url: '/chat/api/sessions',             // указываем URL и
             dataType: "json",                     // тип загружаемых данных
             success: function (data, textStatus) { // вешаем свой обработчик на функцию success
                 users = [];

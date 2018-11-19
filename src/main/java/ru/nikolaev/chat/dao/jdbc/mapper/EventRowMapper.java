@@ -29,7 +29,7 @@ public class EventRowMapper implements RowMapper<Event> {
             User assignee = new User();
             assignee.setId(assigneeId);
             assignee.setName(rs.getString("ASSIGNEE_NAME"));
-            event.setOwner(assignee);
+            event.setAssignee(assignee);
         }
         event.setEventType(EventType.getEventTypeById(rs.getInt("EVENT_TYPE_ID")));
         event.setMessage(rs.getString("MESSAGE"));

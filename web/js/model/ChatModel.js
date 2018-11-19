@@ -5,6 +5,7 @@ function ChatModel() {
     this._messageLoader = new MessageLoader();
     this._currentUser = null;
     this._auth = new Auth();
+    this._eventSender = new EventSender();
     this._currentUserLoader = new CurrentUserLoader();
     this.onPageLoadMessages = new EventEmitter();
     this.onPageLoadUsers = new EventEmitter();
@@ -16,31 +17,42 @@ function ChatModel() {
     this.onLoginPageLoad = new EventEmitter();
     this.onRegistrationPageLoad = new EventEmitter();
     this.onError = new EventEmitter();
+    this.onLoginError = new EventEmitter();
+    this.onMessageSend = new EventEmitter();
+    this.onChatError = new EventEmitter();
 }
 
 ChatModel.prototype.pageLoad = function () {
     var that = this;
-    this._usersLoader.loadUsers().then(function (users) {
-        that.onPageLoadUsers.notify(users);
-    }).catch(function (reason) {
-        that.onError.notify(reason);
-    });
 
+    this.updateUsers();
+    this.updateMessages();
+
+    this._currentUserLoader.loadUser().then(function (user) {
+        that.onPageLoadUser.notify(user);
+        that.onPageLoadMessageInput.notify(user);
+    }).catch(function (error) {
+        that.onPageLoadUser.notify();
+        that.onPageLoadMessageInput.notify();
+        that.onError.notify(error);
+    });
+};
+
+ChatModel.prototype.updateMessages = function () {
+    var that = this;
     this._messageLoader.loadMessages().then(function (messages) {
         that.onPageLoadMessages.notify(messages);
     }).catch(function (reason) {
         that.onError.notify(reason);
     });
+};
 
-    this._currentUserLoader.loadUser().then(function (user) {
-        console.log(user);
-        that.onPageLoadUser.notify(user);
-        that.onPageLoadMessageInput.notify(user);
-    }).catch(function (error) {
-        console.dir(error);
-        that.onPageLoadUser.notify();
-        that.onPageLoadMessageInput.notify();
-        that.onError.notify(error);
+ChatModel.prototype.updateUsers = function () {
+    var that = this;
+    this._usersLoader.loadUsers().then(function (users) {
+        that.onPageLoadUsers.notify(users);
+    }).catch(function (reason) {
+        that.onError.notify(reason);
     });
 };
 
@@ -58,7 +70,7 @@ ChatModel.prototype.login = function () {
     this._auth.login().then(function (value) {
         that.onLogin.notify(value);
     }).catch(function (reason) {
-        console.dir(reason);
+        that.onLoginError.notify(reason);
     })
 
 };
@@ -66,9 +78,11 @@ ChatModel.prototype.login = function () {
 ChatModel.prototype.registration = function () {
     var that = this;
     this._auth.registration().then(function (value) {
-        that.onRegistration.notify(value);
+        that.login();
+        //   that.onRegistration.notify(value);
     }).catch(function (reason) {
         console.dir(reason);
+        that.onLoginError.notify(reason);
     });
 };
 
@@ -77,5 +91,22 @@ ChatModel.prototype.logout = function () {
     this._auth.logout().then(function (value) {
         that.onLogout.notify(value);
     });
+};
+
+ChatModel.prototype.sendMessage = function (message) {
+    var that = this;
+    this._eventSender.sendMessage(message).then(function (value) {
+        console.dir(value);
+        that.onMessageSend.notify(value);
+    }).catch(function (reason) {
+        console.dir(reason);
+        if (reason.status === 400) {
+            that.onChatError.notify(reason);
+        } else {
+            that.onMessageSend.notify();
+        }
+
+
+    })
 };
 
