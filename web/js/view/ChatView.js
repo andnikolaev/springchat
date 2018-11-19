@@ -9,9 +9,6 @@ ChatView.prototype.init = function (user) {
     this._user = user;
     var that = this;
 
-    console.log("ASDASDASDASD");
-
-
     that._model.onPageLoadUser.subscribe(function (user) {
         that.updateCurrentUserHeader(user);
     });
@@ -86,7 +83,12 @@ ChatView.prototype.updateCurrentUserHeader = function (user) {
 };
 
 ChatView.prototype.updateMessages = function (messagesList) {
+    console.log("messssasdasdasdasdads");
     console.log(messagesList);
+    var messageView = new MessageView();
+    var messages = messageView.renderMessagesView(messagesList);
+    console.log("1111111111111111111111111111");
+    console.log(messages);
 };
 
 ChatView.prototype.updateMessageInput = function (user) {

@@ -7,7 +7,7 @@ MessageLoader.prototype.loadMessages = function () {
     return new Promise(function (resolve, reject) {
         var messages = [];
         $.ajax({
-            url: 'http://localhost:8090/chat/api/messages',             // указываем URL и
+            url: 'http://localhost:8090/chat/api/events',             // указываем URL и
             dataType: "json",                     // тип загружаемых данных
             success: function (data, textStatus) { // вешаем свой обработчик на функцию success
                 messages['status'] = textStatus;
