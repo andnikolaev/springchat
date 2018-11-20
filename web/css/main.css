@@ -32,6 +32,25 @@ section {
     margin-top: 12px;
 }
 
+.user-header div {
+    margin-bottom: 20px;
+}
+
+.user-header span {
+    cursor: pointer;
+    margin: 5px;
+}
+
+.list-group-item span {
+    margin: 5px;
+    cursor: pointer;
+    color: red;
+}
+
+.list-group-item span {
+
+}
+
 .user_avatar {
     height: 150px;
     width: 150px;
@@ -94,7 +113,6 @@ section {
     font-size: 20px;
 }
 
-
 /* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */
@@ -106,8 +124,8 @@ section {
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
 /* Modal Content */
@@ -118,7 +136,7 @@ section {
     padding: 0;
     border: 1px solid #888;
     width: 40%;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;
     animation-name: animatetop;
@@ -127,13 +145,25 @@ section {
 
 /* Add Animation */
 @-webkit-keyframes animatetop {
-    from {top:-300px; opacity:0}
-    to {top:0; opacity:1}
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
 }
 
 @keyframes animatetop {
-    from {top:-300px; opacity:0}
-    to {top:0; opacity:1}
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
 }
 
 /* The Close Button */
@@ -157,7 +187,9 @@ section {
     color: white;
 }
 
-.modal-body {padding: 2px 16px;}
+.modal-body {
+    padding: 2px 16px;
+}
 
 .modal-footer {
     padding: 2px 16px;

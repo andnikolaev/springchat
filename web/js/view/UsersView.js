@@ -16,8 +16,7 @@ UsersView.prototype.renderUsersView = function (users, currentUser) {
 };
 
 UsersView.prototype.renderElement = function (user, currentUser) {
-    var element = document.createElement('a');
-    element.href = '#';
+    var element = document.createElement('div');
     element.classList.add('list-group-item');
     element.textContent = user.getName();
     if (user.getUserRole().toUpperCase() === 'ADMIN'.toUpperCase()) {
@@ -25,7 +24,17 @@ UsersView.prototype.renderElement = function (user, currentUser) {
     } else if (user.getUserRole().toUpperCase() === 'USER'.toUpperCase()) {
         element.classList.add('list-group-item-success');
         if (currentUser !== null && currentUser['userRole'].toUpperCase() === "ADMIN".toUpperCase()) {
-            element.textContent += "saddas";
+            console.dir(user.getId());
+            var kickSpan = document.createElement('span');
+            kickSpan.classList.add(user.getId());
+            kickSpan.classList.add("kick");
+            kickSpan.innerText = "kick";
+            element.appendChild(kickSpan);
+            var banSpan = document.createElement('span');
+            banSpan.classList.add(user.getId());
+            banSpan.classList.add("ban");
+            banSpan.innerText = "ban";
+            element.appendChild(banSpan);
         }
     }
     return element;

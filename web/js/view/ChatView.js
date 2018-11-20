@@ -105,6 +105,7 @@ ChatView.prototype.updateCurrentUserHeader = function (user) {
         var authHeaderView = new AuthHeaderView();
         header = authHeaderView.renderAuthHeader();
         header.getElementsByClassName("login")[0].addEventListener('click', function (evt) {
+            console.dir(evt);
             that._controller.loadLoginPage();
         });
         header.getElementsByClassName("register")[0].addEventListener('click', function (evt) {
