@@ -88,3 +88,11 @@ ChatController.prototype.logout = function () {
 ChatController.prototype.sendMessage = function (message) {
     this._model.sendMessage(message);
 };
+
+ChatController.prototype.kick = function (userId) {
+    this._model.kick(userId);
+};
+
+ChatController.prototype.ban = function (userId) {
+    this._model.ban(userId);
+};

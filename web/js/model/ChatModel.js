@@ -20,6 +20,10 @@ function ChatModel() {
     this.onLoginError = new EventEmitter();
     this.onMessageSend = new EventEmitter();
     this.onChatError = new EventEmitter();
+    this.onKick = new EventEmitter();
+    this.onKickError = new EventEmitter();
+    this.onBan = new EventEmitter();
+    this.onBanError = new EventEmitter();
 }
 
 ChatModel.prototype.pageLoad = function () {
@@ -106,3 +110,20 @@ ChatModel.prototype.sendMessage = function (message) {
     })
 };
 
+ChatModel.prototype.kick = function (userId) {
+    var that = this;
+    this._auth.kick(userId).then(function (value) {
+        that.onKick.notify(value);
+    }).catch(function (reason) {
+        that.onKickError.notify(reason);
+    });
+};
+
+ChatModel.prototype.ban = function (userId) {
+    var that = this;
+    this._auth.ban(userId).then(function (value) {
+        that.onBan.notify(value);
+    }).catch(function (reason) {
+        that.onBanError.notify(reason);
+    });
+};

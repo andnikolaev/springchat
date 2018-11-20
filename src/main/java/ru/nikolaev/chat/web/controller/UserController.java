@@ -40,7 +40,6 @@ public class UserController {
     @Autowired
     private AdminService adminService;
 
-
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     @Permission(role = UserRole.ANONYMOUS)

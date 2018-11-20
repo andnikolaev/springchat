@@ -57,3 +57,38 @@ Auth.prototype.logout = function () {
         });
     });
 };
+
+Auth.prototype.kick = function (userId) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            type: "DELETE",
+            url: "/chat/api/users/" + userId + "/session",
+            contentType: "application/json",
+            dataType: "json",
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (errMsg) {
+                reject(errMsg);
+            }
+        });
+    });
+};
+
+Auth.prototype.ban = function (userId) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            type: "POST",
+            url: "/chat/api/users/" + userId + "/session",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({"statusId": 2}),
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (errMsg) {
+                reject(errMsg);
+            }
+        });
+    });
+};
