@@ -68,7 +68,6 @@ MessageView.prototype.renderMessage = function (message) {
                 messageInfo.innerText = message["_owner"]["name"] + " registered in chat;";
                 break;
             case 'KICKED':
-                console.dir(message);
                 messageInfo.innerText = message["_assignee"]["name"] + " was kicked by " + message["_owner"]["name"];
                 break;
             case 'BANNED':

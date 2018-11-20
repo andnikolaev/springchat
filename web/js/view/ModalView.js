@@ -5,7 +5,7 @@ function ModalView() {
 ModalView.prototype.renderLoginPage = function () {
     var modalContainer = document.createElement("div");
     modalContainer.classList.add("modal-content");
-    modalContainer.appendChild(renderLoginHeader("Sign in"));
+    modalContainer.appendChild(renderModalHeader("Sign in"));
     modalContainer.appendChild(renderModalBody());
     return modalContainer;
 
@@ -15,12 +15,20 @@ ModalView.prototype.renderLoginPage = function () {
 ModalView.prototype.renderRegistrationPage = function () {
     var modalContainer = document.createElement("div");
     modalContainer.classList.add("modal-content");
-    modalContainer.appendChild(renderLoginHeader("Registration"));
+    modalContainer.appendChild(renderModalHeader("Registration"));
     modalContainer.appendChild(renderModalBody());
     return modalContainer;
 };
 
-function renderLoginHeader(headerText) {
+ModalView.prototype.renderErrorPage = function (reasonText) {
+    var modalContainer = document.createElement('div');
+    modalContainer.classList.add("modal-content");
+    modalContainer.appendChild(renderModalHeader("Error"));
+    modalContainer.appendChild(renderErrorModalBody(reasonText));
+    return modalContainer;
+};
+
+function renderModalHeader(headerText) {
     var modalHeader = document.createElement('div');
     modalHeader.classList.add('modal-header');
     var spanContainer = document.createElement('span');
@@ -31,6 +39,21 @@ function renderLoginHeader(headerText) {
     header.innerText = headerText;
     modalHeader.appendChild(header);
     return modalHeader;
+}
+
+function renderErrorModalBody(reasonText) {
+    var bodyContainer = document.createElement('div');
+    bodyContainer.classList.add('modal-body');
+    var errorDiv = document.createElement('div');
+    errorDiv.classList.add('login-error');
+    if (reasonText === "\"userKicked\"") {
+        errorDiv.innerText = "You has been kicked.";
+    }
+    if (reasonText === "\"userBanned\"") {
+        errorDiv.innerText = "You has been banned.";
+    }
+    bodyContainer.appendChild(errorDiv);
+    return bodyContainer;
 }
 
 function renderModalBody() {

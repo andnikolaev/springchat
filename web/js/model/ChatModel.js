@@ -43,7 +43,7 @@ ChatModel.prototype.updateMessages = function () {
     this._messageLoader.loadMessages().then(function (messages) {
         that.onPageLoadMessages.notify(messages);
     }).catch(function (reason) {
-        that.onError.notify(reason);
+        that.onError.notify();
     });
 };
 
@@ -52,7 +52,7 @@ ChatModel.prototype.updateUsers = function () {
     this._usersLoader.loadUsers().then(function (users) {
         that.onPageLoadUsers.notify(users);
     }).catch(function (reason) {
-        that.onError.notify(reason);
+        that.onError.notify();
     });
 };
 
@@ -68,10 +68,8 @@ ChatModel.prototype.loadRegistrationPage = function () {
 ChatModel.prototype.login = function () {
     var that = this;
     this._auth.login().then(function (value) {
-        console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         that.onLogin.notify(value);
     }).catch(function (reason) {
-        console.log("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         that.onLoginError.notify(reason);
     })
 
@@ -83,7 +81,6 @@ ChatModel.prototype.registration = function () {
         that.login();
         //   that.onRegistration.notify(value);
     }).catch(function (reason) {
-        console.dir(reason);
         that.onLoginError.notify(reason);
     });
 };
@@ -98,12 +95,11 @@ ChatModel.prototype.logout = function () {
 ChatModel.prototype.sendMessage = function (message) {
     var that = this;
     this._eventSender.sendMessage(message).then(function (value) {
-        console.dir(value);
         that.onMessageSend.notify(value);
     }).catch(function (reason) {
-        console.dir(reason);
-        if (reason.status === 400) {
+        if (reason.status !== 200) {
             that.onChatError.notify(reason);
+            that.onError.notify(reason);
         } else {
             that.onMessageSend.notify();
         }

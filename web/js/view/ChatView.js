@@ -2,6 +2,7 @@ function ChatView(model, controller) {
     this._model = model;
     this._controller = controller;
     this._user = null;
+    this._timer = null;
 }
 
 ChatView.prototype.init = function (user) {
@@ -14,7 +15,12 @@ ChatView.prototype.init = function (user) {
     });
 
     that._model.onPageLoadUser.subscribe(function (user) {
-        that._user = user;
+        if (user === undefined) {
+            that._user = null;
+        } else {
+            that._user = user;
+        }
+
         that.updateCurrentUserHeader(user);
     });
 
@@ -66,19 +72,24 @@ ChatView.prototype.init = function (user) {
 
     that._controller.loadPage();
 
-    var timer = setInterval(function () {
-        that._controller.updateMessages();
-    }, 4000);
-    //
+    that.startRefreshing();
+
     // var timerUsers = setInterval(function () {
     //     that._controller.updateUsers();
     // }, 4000);
 };
 
+ChatView.prototype.startRefreshing = function () {
+    var that = this;
+    that._timer = setInterval(function () {
+        that._controller.loadPage();
+    }, 4000);
+};
+
 ChatView.prototype.updateUserList = function (userList, currentUser) {
     var usersView = new UsersView();
     //TODO Притащить сюда текущего пользователя!!!!!!!!!!!!!!!!
-    var renderedUsersVies = usersView.renderUsersView(userList);
+    var renderedUsersVies = usersView.renderUsersView(userList, this._user);
     var userListContainer = document.getElementById('user-list-container');
     userListContainer.innerHTML = "";
     userListContainer.appendChild(renderedUsersVies);
@@ -157,16 +168,55 @@ ChatView.prototype.loginPageLoad = function () {
     var renderedLoginPage = modalView.renderLoginPage();
     modal.appendChild(renderedLoginPage);
     document.getElementById("submit-login").addEventListener("click", function (ev) {
+        that.startRefreshing();
         that._controller.login();
     });
     var span = document.getElementsByClassName("close")[0];
     span.addEventListener("click", function () {
+        that.startRefreshing();
         modal.innerHTML = "";
         modal.style.display = "none";
         history.pushState(null, null, '/chat');
     });
-
+    clearInterval(this._timer);
     modal.style.display = "block";
+};
+
+ChatView.prototype.errorAlert = function (reason) {
+    var that = this;
+    if (reason === undefined) {
+        return;
+    }
+    var reasonText = "";
+    if (Array.isArray(reason['responseText'])) {
+        reasonText = reason['responseText'][0];
+    } else {
+        reasonText = reason['responseText'];
+    }
+    reasonText = reasonText.replace('[', "");
+    reasonText = reasonText.replace(']', "");
+    reasonText = reasonText.split(',');
+    reasonText = reasonText[reasonText.length - 1];
+    if (reasonText === "\"userKicked\"" || reasonText === "\"userBanned\"") {
+
+        var modal = document.getElementById('myModal');
+        var modalView = new ModalView();
+        var renderedLoginPage = modalView.renderErrorPage(reasonText);
+        modal.appendChild(renderedLoginPage);
+        var span = document.getElementsByClassName("close")[0];
+        span.addEventListener("click", function () {
+            that.startRefreshing();
+            modal.innerHTML = "";
+            modal.style.display = "none";
+            history.pushState(null, null, '/chat');
+        });
+        clearInterval(this._timer);
+        modal.style.display = "block";
+    }
+    // if (reasonText === "\"userBanned\"") {
+    //     alert("You have been banned in this chat");
+    //     that._controller.loadPage();
+    // }
 };
 
 ChatView.prototype.registrationPageLoad = function () {
@@ -176,14 +226,17 @@ ChatView.prototype.registrationPageLoad = function () {
     var renderedLoginPage = modalView.renderRegistrationPage();
     modal.appendChild(renderedLoginPage);
     document.getElementById("submit-login").addEventListener("click", function (ev) {
+        that.startRefreshing();
         that._controller.registration();
     });
     var span = document.getElementsByClassName("close")[0];
     span.addEventListener("click", function () {
+        that.startRefreshing();
         modal.innerHTML = "";
         modal.style.display = "none";
         history.pushState(null, null, '/chat');
     });
+    clearInterval(this._timer);
     modal.style.display = "block";
 };
 
@@ -246,27 +299,3 @@ ChatView.prototype.chatError = function (reason) {
     }
 };
 
-ChatView.prototype.errorAlert = function (reason) {
-    var that = this;
-    console.log("ERRRRRRRRRRRRRRRRRRRRRRRRRRRROOORR");
-    console.dir(reason);
-    var reasonText = "";
-    if (Array.isArray(reason['responseText'])) {
-        reasonText = reason['responseText'][0];
-    } else {
-        reasonText = reason['responseText'];
-    }
-    reasonText = reasonText.replace('[', "");
-    reasonText = reasonText.replace(']', "");
-    reasonText = reasonText.split(',');
-    reasonText = reasonText[reasonText.length - 1];
-    if (reasonText === "\"userKicked\"") {
-        alert("You have been kicked from this chat");
-        that._controller.loadPage();
-    }
-    if (reasonText === "\"userBanned\"") {
-        alert("You have been banned in this chat");
-        that._controller.loadPage();
-    }
-
-};
