@@ -21,7 +21,9 @@ public class EventController {
     public List<Event> getLastEvents() {
         //TODO перенести в файл настроек
         int count = 20;
-        log.info("Start getting last events count = " + count);
-        return eventService.getLastEvents(count);
+        log.debug("Start getLastEvents count:" + count);
+        List<Event> events = eventService.getLastEvents(count);
+        log.debug("End getLastEvents, events: " + events);
+        return events;
     }
 }

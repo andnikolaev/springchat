@@ -1,5 +1,7 @@
 package ru.nikolaev.chat.web.controller;
 
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -9,6 +11,7 @@ import ru.nikolaev.chat.exception.*;
 
 import java.util.List;
 
+@Slf4j
 @RestControllerAdvice
 public class ChatControllerAdvice {
 
@@ -16,6 +19,8 @@ public class ChatControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     List<String> processExceptionHandler(BadRequestDataException ex) {
+        log.info("Handling BadRequestDataException");
+        log.trace("BadRequestDataException", ex);
         return ex.getErrorList();
     }
 
@@ -23,7 +28,9 @@ public class ChatControllerAdvice {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
     List<String> processExceptionHandler(UserAlreadyLoginException ex) {
+        log.info("Handling UserAlreadyLoginException");
         ex.addError("youAlreadyLogin");
+        log.trace("UserAlreadyLoginException", ex);
         return ex.getErrorList();
     }
 
@@ -31,7 +38,9 @@ public class ChatControllerAdvice {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
     List<String> processExceptionHandler(UserAlreadyExistException ex) {
+        log.info("Handling UserAlreadyExistException");
         ex.addError("userExist");
+        log.trace("UserAlreadyExistException", ex);
         return ex.getErrorList();
     }
 
@@ -39,7 +48,9 @@ public class ChatControllerAdvice {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
     List<String> processExceptionHandler(UserLoginFailedException ex) {
+        log.info("Handling UserLoginFailedException");
         ex.addError("userNotFound");
+        log.trace("UserLoginFailedException", ex);
         return ex.getErrorList();
     }
 
@@ -47,7 +58,9 @@ public class ChatControllerAdvice {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
     List<String> processExceptionHandler(UserKickedException ex) {
+        log.info("Handling UserKickedException");
         ex.addError("userKicked");
+        log.trace("UserKickedException", ex);
         return ex.getErrorList();
     }
 
@@ -55,7 +68,9 @@ public class ChatControllerAdvice {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
     List<String> processExceptionHandler(UserBannedException ex) {
+        log.info("Handling UserBannedException");
         ex.addError("userBanned");
+        log.trace("UserBannedException", ex);
         return ex.getErrorList();
     }
 
@@ -63,6 +78,8 @@ public class ChatControllerAdvice {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ResponseBody
     List<String> processExceptionHandler(AccessDeniedException ex) {
+        log.info("Handling AccessDeniedException");
+        log.trace("AccessDeniedException", ex);
         return ex.getErrorList();
     }
 }

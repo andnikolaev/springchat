@@ -23,14 +23,16 @@ public class UpdateCurrentOnlineUserInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        log.debug("Start preHandle");
         User currentOnlineUser = onlineUser.getUser();
         if (currentOnlineUser.getId() != 0) {
             User actualUser = userService.getUserWithActualData(currentOnlineUser);
             onlineUser.setUser(actualUser);
+            log.info("Current user " + actualUser + " Actual user" + actualUser);
         } else {
             log.info("Online user doest`t exist");
         }
-
+        log.debug("end preHandle");
         return true;
     }
 }

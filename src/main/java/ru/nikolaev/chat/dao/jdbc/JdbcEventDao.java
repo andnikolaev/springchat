@@ -1,5 +1,6 @@
 package ru.nikolaev.chat.dao.jdbc;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.DataAccessException;
@@ -20,6 +21,7 @@ import java.sql.Types;
 import java.util.List;
 
 @Repository
+@Slf4j
 public class JdbcEventDao implements EventDao {
 
     private static final String SEND_EVENT_SQL =
@@ -49,64 +51,83 @@ public class JdbcEventDao implements EventDao {
 
     @Override
     public List<Event> getLastEvents(int count) {
+        log.debug("Start getLastEvents, count = " + count);
         List<Event> events = null;
         try {
             events = jdbcTemplate.query(GET_LAST_N_EVENTS_SQL, new EventRowMapper(), count);
         } catch (DataAccessException e) {
-
+            log.warn("Error getting last events");
         }
+        log.trace("Events:" + events);
+        log.debug("End getLastEvents");
         return events;
     }
 
     @Override
     public List<Event> getLastEventsByType(EventType eventType, int count) {
+        log.debug("Start getLastEventsByType, count = " + count);
         List<Event> events = null;
         try {
             events = jdbcTemplate.query(GET_LAST_N_EVENTS_BY_TYPE_SQL, new EventRowMapper(), eventType.id(), count);
         } catch (DataAccessException e) {
-
+            log.warn("Error getting last events");
         }
+        log.trace("Events:" + events);
+        log.debug("End getLastEventsByType");
         return events;
     }
 
     @Override
     public Event getEventById(long id) {
+        log.debug("Start getEventById with id= " + id);
         Event event = null;
         try {
             event = jdbcTemplate.queryForObject(GET_EVENT_BY_ID_SQL, new EventRowMapper(), id);
         } catch (DataAccessException e) {
-
+            log.warn("Event with id " + id + " not found.");
         }
+        log.debug("End getEventById, result " + event);
         return event;
     }
 
     @Override
     public Event sendEvent(Event event) {
+        log.info("Start sendEvent");
+        log.debug("Event: " + event);
+
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new SendEventPreparedStatementCreator(event), keyHolder);
         Event createdEvent = getEventById(keyHolder.getKey().intValue());
+
+
+        log.debug("Created event: " + createdEvent);
+        log.info("End sendEvent");
         return createdEvent;
     }
 
     @Override
     public Event getLastEventForUserByOwnerId(long ownerUserId) {
+        log.debug("Start getLastEventForUserByOwnerId with user id= " + ownerUserId);
         Event event = null;
         try {
             event = jdbcTemplate.queryForObject(GET_LAST_EVENT_BY_OWNER_USER_ID_SQL, new EventRowMapper(), ownerUserId);
         } catch (DataAccessException e) {
-
+            log.debug("Event for owner user with id " + ownerUserId + " not found.");
         }
+        log.debug("End getLastEventForUserByOwnerId with user id = " + ownerUserId + " Event: " + event);
         return event;
     }
 
     @Override
     public Event getLastEventForUserByAssigneeId(long assigneeUserId) {
+        log.debug("Start getLastEventForUserByAssigneeId with user id= " + assigneeUserId);
         Event event = null;
         try {
             event = jdbcTemplate.queryForObject(GET_LAST_EVENT_BY_ASSIGNEE_USER_ID_SQL, new EventRowMapper(), assigneeUserId);
         } catch (DataAccessException e) {
-
+            log.debug("Event for assignee user with id " + assigneeUserId + " not found.");
         }
+        log.debug("End getLastEventForUserByAssigneeId with user id= " + assigneeUserId + " Event: " + event);
         return event;
     }
 

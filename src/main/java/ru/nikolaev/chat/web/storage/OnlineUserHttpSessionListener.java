@@ -1,5 +1,6 @@
 package ru.nikolaev.chat.web.storage;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import java.util.Enumeration;
 
+@Slf4j
 @Component
 public class OnlineUserHttpSessionListener implements HttpSessionListener, ApplicationContextAware {
 
@@ -26,6 +28,7 @@ public class OnlineUserHttpSessionListener implements HttpSessionListener, Appli
 
     @Override
     public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
+        log.info("Start sessionDestroyed");
         HttpSession session = httpSessionEvent.getSession();
         Enumeration<String> sessionsAttribute = session.getAttributeNames();
         while (sessionsAttribute.hasMoreElements()) {
@@ -34,8 +37,10 @@ public class OnlineUserHttpSessionListener implements HttpSessionListener, Appli
                 OnlineUser onlineUser = (OnlineUser) object;
                 User user = onlineUser.getUser();
                 onlineUserManager.removeUser(user);
+                log.info("Session destroyed for user" + user);
             }
         }
+        log.info("End sessionDestroyed");
     }
 
     @Override
