@@ -19,6 +19,9 @@ public class ChatControllerAdvice {
         return ex.getErrorList();
     }
 
+    @ExceptionHandler({UserAlreadyLoginException.class})
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
     List<String> processExceptionHandler(UserAlreadyLoginException ex) {
         ex.addError("youAlreadyLogin");
         return ex.getErrorList();

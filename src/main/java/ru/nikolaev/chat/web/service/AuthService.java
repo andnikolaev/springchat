@@ -11,6 +11,7 @@ import ru.nikolaev.chat.enums.UserRole;
 import ru.nikolaev.chat.enums.UserStatus;
 import ru.nikolaev.chat.exception.ExceptionThrower;
 import ru.nikolaev.chat.exception.UserAlreadyExistException;
+import ru.nikolaev.chat.exception.UserBannedException;
 import ru.nikolaev.chat.exception.UserLoginFailedException;
 
 @Service
@@ -39,7 +40,10 @@ public class AuthService {
     public User login(String name, String password, String ip) {
         User user = userDao.checkAuth(name, password);
         if (user == null) {
-            new ExceptionThrower(new UserLoginFailedException()).throwException();
+            throw new UserLoginFailedException();
+        }
+        if (UserStatus.BANNED.equals(user.getUserStatus())) {
+            throw new UserBannedException();
         }
         eventService.sendEvent(user, EventType.LOGIN, ip);
         return user;

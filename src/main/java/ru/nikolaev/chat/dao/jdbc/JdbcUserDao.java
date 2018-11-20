@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -27,7 +28,7 @@ public class JdbcUserDao implements UserDao {
             "INSERT INTO ALL_USER (NAME, PASSWORD, ROLE_ID, STATUS_ID) VALUES (?,?,?,?)";
 
     private static final String UPDATE_USER_SQL =
-            "UPDATE ALL_USER SET NAME = ?, PASSWORD=?, ROLE_ID=?, STATUS_ID=? WHERE ID=?";
+            "UPDATE ALL_USER SET NAME = ?, ROLE_ID=?, STATUS_ID=? WHERE ID=?";
 
     private static final String GET_USER_BY_ID_SQL =
             "SELECT * FROM ALL_USER WHERE ID=?";
@@ -54,8 +55,12 @@ public class JdbcUserDao implements UserDao {
     @Override
     public User updateUser(User user) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(new UpdateUserPreparedStatementCreator(user), keyHolder);
-        User addedUser = getUserById(keyHolder.getKey().intValue());
+        try {
+            jdbcTemplate.update(new UpdateUserPreparedStatementCreator(user), keyHolder);
+        } catch (UncategorizedSQLException e) {
+
+        }
+        User addedUser = getUserById(user.getId());
         return addedUser;
     }
 
@@ -123,12 +128,11 @@ public class JdbcUserDao implements UserDao {
         @Override
         public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
             //String sql = env.getProperty("user.update");
-            PreparedStatement ps = con.prepareStatement(UPDATE_USER_SQL);
+            PreparedStatement ps = con.prepareStatement(UPDATE_USER_SQL, new String[]{"id"});
             ps.setString(1, user.getName());
-            ps.setString(2, user.getPassword());
-            ps.setLong(3, user.getUserRole().id());
-            ps.setLong(4, user.getUserStatus().id());
-            ps.setLong(5, user.getId());
+            ps.setLong(2, user.getUserRole().id());
+            ps.setLong(3, user.getUserStatus().id());
+            ps.setLong(4, user.getId());
             return ps;
         }
     }

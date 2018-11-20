@@ -25,7 +25,7 @@ public class AdminService {
     public User banUser(User owner, long banedUserId, String ownerIp) {
         User bannedUser = userDao.getUserById(banedUserId);
         bannedUser.setUserStatus(UserStatus.BANNED);
-        userDao.updateUser(owner);
+        userDao.updateUser(bannedUser);
         eventService.sendEvent(owner, new User(banedUserId), EventType.BANNED, ownerIp);
         return userDao.getUserById(banedUserId);
     }

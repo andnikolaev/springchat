@@ -68,8 +68,10 @@ ChatModel.prototype.loadRegistrationPage = function () {
 ChatModel.prototype.login = function () {
     var that = this;
     this._auth.login().then(function (value) {
+        console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         that.onLogin.notify(value);
     }).catch(function (reason) {
+        console.log("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         that.onLoginError.notify(reason);
     })
 
@@ -105,8 +107,6 @@ ChatModel.prototype.sendMessage = function (message) {
         } else {
             that.onMessageSend.notify();
         }
-
-
     })
 };
 

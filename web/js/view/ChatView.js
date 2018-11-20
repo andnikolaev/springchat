@@ -60,11 +60,15 @@ ChatView.prototype.init = function (user) {
         that.messageSend(that);
     });
 
+    that._model.onError.subscribe(function (reason) {
+        that.errorAlert(reason);
+    });
+
     that._controller.loadPage();
 
-    // var timer = setInterval(function () {
-    //     that._controller.updateMessages();
-    // }, 4000);
+    var timer = setInterval(function () {
+        that._controller.updateMessages();
+    }, 4000);
     //
     // var timerUsers = setInterval(function () {
     //     that._controller.updateUsers();
@@ -83,6 +87,8 @@ ChatView.prototype.updateUserList = function (userList, currentUser) {
 
 ChatView.prototype.updateCurrentUserHeader = function (user) {
     var that = this;
+    var errorMessageHead = document.getElementById('chatError');
+    errorMessageHead.innerText = "";
     var header;
     if (user === undefined) {
         var authHeaderView = new AuthHeaderView();
@@ -210,7 +216,9 @@ ChatView.prototype.loginError = function (reason) {
         errorDiv.innerText = "The password must not be empty and have a length of 3 to 20 characters."
     }
 
-
+    if (reasonText === "\"userBanned\"") {
+        errorDiv.innerText = "User has been banned."
+    }
 };
 
 ChatView.prototype.messageSend = function (that) {
@@ -236,4 +244,29 @@ ChatView.prototype.chatError = function (reason) {
     if (reasonText === "\"text error\"") {
         errorDiv.innerText = "Message must have a length of 1 to 255";
     }
+};
+
+ChatView.prototype.errorAlert = function (reason) {
+    var that = this;
+    console.log("ERRRRRRRRRRRRRRRRRRRRRRRRRRRROOORR");
+    console.dir(reason);
+    var reasonText = "";
+    if (Array.isArray(reason['responseText'])) {
+        reasonText = reason['responseText'][0];
+    } else {
+        reasonText = reason['responseText'];
+    }
+    reasonText = reasonText.replace('[', "");
+    reasonText = reasonText.replace(']', "");
+    reasonText = reasonText.split(',');
+    reasonText = reasonText[reasonText.length - 1];
+    if (reasonText === "\"userKicked\"") {
+        alert("You have been kicked from this chat");
+        that._controller.loadPage();
+    }
+    if (reasonText === "\"userBanned\"") {
+        alert("You have been banned in this chat");
+        that._controller.loadPage();
+    }
+
 };
