@@ -4,7 +4,6 @@ package ru.nikolaev.chat.web.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.nikolaev.chat.dao.EventDao;
 import ru.nikolaev.chat.dao.UserDao;
 import ru.nikolaev.chat.enums.EventType;
 import ru.nikolaev.chat.entity.User;
@@ -17,7 +16,7 @@ import ru.nikolaev.chat.exception.UserLoginFailedException;
 @Service
 public class AuthService {
     @Autowired
-    private EventService eventSevice;
+    private EventService eventService;
     @Autowired
     private UserDao userDao;
 
@@ -33,7 +32,7 @@ public class AuthService {
         user.setUserRole(UserRole.USER);
         user.setUserStatus(UserStatus.ACTIVE);
         user = userDao.addUser(user);
-        eventSevice.sendEvent(user, EventType.REGISTERED, ip);
+        eventService.sendEvent(user, EventType.REGISTERED, ip);
         return user;
     }
 
@@ -42,11 +41,11 @@ public class AuthService {
         if (user == null) {
             new ExceptionThrower(new UserLoginFailedException()).throwException();
         }
-        eventSevice.sendEvent(user, EventType.LOGIN, ip);
+        eventService.sendEvent(user, EventType.LOGIN, ip);
         return user;
     }
 
     public void logout(User user, String ip) {
-        eventSevice.sendEvent(user, EventType.LOGOUT, ip);
+        eventService.sendEvent(user, EventType.LOGOUT, ip);
     }
 }

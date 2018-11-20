@@ -16,5 +16,7 @@ public interface EventDao {
 
     Event sendEvent(Event event);
 
-    Event getLastEventForUser(long userId);
+    Event getLastEventForUserByOwnerId(long ownerUserId);
+
+    Event getLastEventForUserByAssigneeId(long assigneeUserId);
 }

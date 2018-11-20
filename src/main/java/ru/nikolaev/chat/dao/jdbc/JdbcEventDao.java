@@ -34,8 +34,11 @@ public class JdbcEventDao implements EventDao {
     private static final String GET_LAST_N_EVENTS_BY_TYPE_SQL =
             "SELECT * FROM (SELECT EVENT.*, AU_OWNER.NAME OWNER_NAME, AU_ASSIGNEE.NAME ASSIGNEE_NAME, AU_OWNER.ROLE_ID OWNER_ROLE FROM EVENT INNER JOIN ALL_USER AU_OWNER on EVENT.OWNER_ID = AU_OWNER.ID LEFT JOIN ALL_USER AU_ASSIGNEE on AU_ASSIGNEE.ID = EVENT.ASSIGNEE_ID WHERE EVENT_TYPE_ID = ? ORDER BY EVENT.TIME_STAMP desc) WHERE (ROWNUM<=?) ORDER BY TIME_STAMP asc";
 
-    private static final String GET_LAST_EVENT_BY_USER_ID_SQL =
-            "SELECT * FROM (SELECT EVENT.*, AU_OWNER.NAME OWNER_NAME, AU_ASSIGNEE.NAME ASSIGNEE_NAME, AU_OWNER.ROLE_ID OWNER_ROLE FROM EVENT INNER JOIN ALL_USER AU_OWNER on EVENT.OWNER_ID = AU_OWNER.ID LEFT JOIN ALL_USER AU_ASSIGNEE on AU_ASSIGNEE.ID = EVENT.ASSIGNEE_ID WHERE EVENT.OWNER_ID = ? ORDER BY EVENT.TIME_STAMP desc) WHERE (ROWNUM<=1)";
+    private static final String GET_LAST_EVENT_BY_OWNER_USER_ID_SQL =
+            "SELECT * FROM (SELECT EVENT.*, AU_OWNER.NAME OWNER_NAME, AU_ASSIGNEE.NAME ASSIGNEE_NAME, AU_OWNER.ROLE_ID OWNER_ROLE FROM EVENT INNER JOIN ALL_USER AU_OWNER on EVENT.OWNER_ID = AU_OWNER.ID LEFT JOIN ALL_USER AU_ASSIGNEE on AU_ASSIGNEE.ID = EVENT.ASSIGNEE_ID WHERE EVENT.OWNER_ID = ? AND EVENT.EVENT_TYPE_ID BETWEEN 1 AND 4 ORDER BY EVENT.TIME_STAMP desc) WHERE (ROWNUM<=1)";
+
+    private static final String GET_LAST_EVENT_BY_ASSIGNEE_USER_ID_SQL =
+            "SELECT * FROM (SELECT EVENT.*, AU_OWNER.NAME OWNER_NAME, AU_ASSIGNEE.NAME ASSIGNEE_NAME, AU_OWNER.ROLE_ID OWNER_ROLE FROM EVENT INNER JOIN ALL_USER AU_OWNER on EVENT.OWNER_ID = AU_OWNER.ID LEFT JOIN ALL_USER AU_ASSIGNEE on AU_ASSIGNEE.ID = EVENT.ASSIGNEE_ID WHERE EVENT.ASSIGNEE_ID = ? AND EVENT.EVENT_TYPE_ID BETWEEN 5 AND 7 ORDER BY EVENT.TIME_STAMP desc) WHERE (ROWNUM<=1)";
 
 
     @Autowired
@@ -86,10 +89,21 @@ public class JdbcEventDao implements EventDao {
     }
 
     @Override
-    public Event getLastEventForUser(long userId) {
+    public Event getLastEventForUserByOwnerId(long ownerUserId) {
         Event event = null;
         try {
-            event = jdbcTemplate.queryForObject(GET_LAST_EVENT_BY_USER_ID_SQL, new EventRowMapper(), userId);
+            event = jdbcTemplate.queryForObject(GET_LAST_EVENT_BY_OWNER_USER_ID_SQL, new EventRowMapper(), ownerUserId);
+        } catch (DataAccessException e) {
+
+        }
+        return event;
+    }
+
+    @Override
+    public Event getLastEventForUserByAssigneeId(long assigneeUserId) {
+        Event event = null;
+        try {
+            event = jdbcTemplate.queryForObject(GET_LAST_EVENT_BY_ASSIGNEE_USER_ID_SQL, new EventRowMapper(), assigneeUserId);
         } catch (DataAccessException e) {
 
         }
