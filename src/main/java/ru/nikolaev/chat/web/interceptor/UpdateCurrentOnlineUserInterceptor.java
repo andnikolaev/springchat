@@ -28,9 +28,9 @@ public class UpdateCurrentOnlineUserInterceptor implements HandlerInterceptor {
         if (currentOnlineUser.getId() != 0) {
             User actualUser = userService.getUserWithActualData(currentOnlineUser);
             onlineUser.setUser(actualUser);
-            log.info("Current user " + actualUser + " Actual user" + actualUser);
+            log.debug("Current user " + actualUser + " Actual user" + actualUser);
         } else {
-            log.info("Online user doest`t exist");
+            log.debug("Online user doest`t exist");
         }
         log.debug("end preHandle");
         return true;

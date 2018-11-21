@@ -2,6 +2,7 @@ package ru.nikolaev.chat.dao.jdbc;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,26 +23,8 @@ import java.util.List;
 
 @Repository
 @Slf4j
+@PropertySource("classpath:queries.properties")
 public class JdbcEventDao implements EventDao {
-
-    private static final String SEND_EVENT_SQL =
-            "INSERT INTO EVENT (owner_id,ASSIGNEE_ID,event_type_id,message,ip) VALUES(?,?,?,?,?)";
-
-    private static final String GET_EVENT_BY_ID_SQL =
-            "SELECT EVENT.*, AU_OWNER.NAME OWNER_NAME, AU_ASSIGNEE.NAME ASSIGNEE_NAME FROM EVENT INNER JOIN ALL_USER AU_OWNER on EVENT.OWNER_ID = AU_OWNER.ID LEFT JOIN ALL_USER AU_ASSIGNEE on AU_ASSIGNEE.ID = EVENT.ASSIGNEE_ID  WHERE EVENT.ID = ?";
-
-    private static final String GET_LAST_N_EVENTS_SQL =
-            "SELECT * FROM (SELECT EVENT.*, AU_OWNER.NAME OWNER_NAME, AU_ASSIGNEE.NAME ASSIGNEE_NAME, AU_OWNER.ROLE_ID OWNER_ROLE FROM EVENT INNER JOIN ALL_USER AU_OWNER on EVENT.OWNER_ID = AU_OWNER.ID LEFT JOIN ALL_USER AU_ASSIGNEE on AU_ASSIGNEE.ID = EVENT.ASSIGNEE_ID ORDER BY EVENT.TIME_STAMP desc) WHERE (ROWNUM<=?) ORDER BY TIME_STAMP asc";
-
-    private static final String GET_LAST_N_EVENTS_BY_TYPE_SQL =
-            "SELECT * FROM (SELECT EVENT.*, AU_OWNER.NAME OWNER_NAME, AU_ASSIGNEE.NAME ASSIGNEE_NAME, AU_OWNER.ROLE_ID OWNER_ROLE FROM EVENT INNER JOIN ALL_USER AU_OWNER on EVENT.OWNER_ID = AU_OWNER.ID LEFT JOIN ALL_USER AU_ASSIGNEE on AU_ASSIGNEE.ID = EVENT.ASSIGNEE_ID WHERE EVENT_TYPE_ID = ? ORDER BY EVENT.TIME_STAMP desc) WHERE (ROWNUM<=?) ORDER BY TIME_STAMP asc";
-
-    private static final String GET_LAST_EVENT_BY_OWNER_USER_ID_SQL =
-            "SELECT * FROM (SELECT EVENT.*, AU_OWNER.NAME OWNER_NAME, AU_ASSIGNEE.NAME ASSIGNEE_NAME, AU_OWNER.ROLE_ID OWNER_ROLE FROM EVENT INNER JOIN ALL_USER AU_OWNER on EVENT.OWNER_ID = AU_OWNER.ID LEFT JOIN ALL_USER AU_ASSIGNEE on AU_ASSIGNEE.ID = EVENT.ASSIGNEE_ID WHERE EVENT.OWNER_ID = ? AND EVENT.EVENT_TYPE_ID BETWEEN 1 AND 4 ORDER BY EVENT.TIME_STAMP desc) WHERE (ROWNUM<=1)";
-
-    private static final String GET_LAST_EVENT_BY_ASSIGNEE_USER_ID_SQL =
-            "SELECT * FROM (SELECT EVENT.*, AU_OWNER.NAME OWNER_NAME, AU_ASSIGNEE.NAME ASSIGNEE_NAME, AU_OWNER.ROLE_ID OWNER_ROLE FROM EVENT INNER JOIN ALL_USER AU_OWNER on EVENT.OWNER_ID = AU_OWNER.ID LEFT JOIN ALL_USER AU_ASSIGNEE on AU_ASSIGNEE.ID = EVENT.ASSIGNEE_ID WHERE EVENT.ASSIGNEE_ID = ? AND EVENT.EVENT_TYPE_ID BETWEEN 5 AND 7 ORDER BY EVENT.TIME_STAMP desc) WHERE (ROWNUM<=1)";
-
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -54,7 +37,8 @@ public class JdbcEventDao implements EventDao {
         log.debug("Start getLastEvents, count = " + count);
         List<Event> events = null;
         try {
-            events = jdbcTemplate.query(GET_LAST_N_EVENTS_SQL, new EventRowMapper(), count);
+            String sqlQuery = env.getProperty("event.get.last.n");
+            events = jdbcTemplate.query(sqlQuery, new EventRowMapper(), count);
         } catch (DataAccessException e) {
             log.warn("Error getting last events");
         }
@@ -68,7 +52,8 @@ public class JdbcEventDao implements EventDao {
         log.debug("Start getLastEventsByType, count = " + count);
         List<Event> events = null;
         try {
-            events = jdbcTemplate.query(GET_LAST_N_EVENTS_BY_TYPE_SQL, new EventRowMapper(), eventType.id(), count);
+            String sqlQuery = env.getProperty("event.get.last.n.by.type");
+            events = jdbcTemplate.query(sqlQuery, new EventRowMapper(), eventType.id(), count);
         } catch (DataAccessException e) {
             log.warn("Error getting last events");
         }
@@ -82,7 +67,8 @@ public class JdbcEventDao implements EventDao {
         log.debug("Start getEventById with id= " + id);
         Event event = null;
         try {
-            event = jdbcTemplate.queryForObject(GET_EVENT_BY_ID_SQL, new EventRowMapper(), id);
+            String sqlQuery = env.getProperty("event.get.by.id");
+            event = jdbcTemplate.queryForObject(sqlQuery, new EventRowMapper(), id);
         } catch (DataAccessException e) {
             log.warn("Event with id " + id + " not found.");
         }
@@ -99,7 +85,6 @@ public class JdbcEventDao implements EventDao {
         jdbcTemplate.update(new SendEventPreparedStatementCreator(event), keyHolder);
         Event createdEvent = getEventById(keyHolder.getKey().intValue());
 
-
         log.debug("Created event: " + createdEvent);
         log.info("End sendEvent");
         return createdEvent;
@@ -110,7 +95,8 @@ public class JdbcEventDao implements EventDao {
         log.debug("Start getLastEventForUserByOwnerId with user id= " + ownerUserId);
         Event event = null;
         try {
-            event = jdbcTemplate.queryForObject(GET_LAST_EVENT_BY_OWNER_USER_ID_SQL, new EventRowMapper(), ownerUserId);
+            String sqlQuery = env.getProperty("event.get.last.by.owner.id");
+            event = jdbcTemplate.queryForObject(sqlQuery, new EventRowMapper(), ownerUserId);
         } catch (DataAccessException e) {
             log.debug("Event for owner user with id " + ownerUserId + " not found.");
         }
@@ -123,7 +109,8 @@ public class JdbcEventDao implements EventDao {
         log.debug("Start getLastEventForUserByAssigneeId with user id= " + assigneeUserId);
         Event event = null;
         try {
-            event = jdbcTemplate.queryForObject(GET_LAST_EVENT_BY_ASSIGNEE_USER_ID_SQL, new EventRowMapper(), assigneeUserId);
+            String sqlQuery = env.getProperty("event.get.last.by.assignee.id");
+            event = jdbcTemplate.queryForObject(sqlQuery, new EventRowMapper(), assigneeUserId);
         } catch (DataAccessException e) {
             log.debug("Event for assignee user with id " + assigneeUserId + " not found.");
         }
@@ -136,14 +123,15 @@ public class JdbcEventDao implements EventDao {
 
         private Event event;
 
-        public SendEventPreparedStatementCreator(Event event) {
+        SendEventPreparedStatementCreator(Event event) {
             this.event = event;
         }
 
 
         @Override
         public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-            PreparedStatement ps = con.prepareStatement(SEND_EVENT_SQL, new String[]{"id"});
+            String sqlQuery = env.getProperty("event.send");
+            PreparedStatement ps = con.prepareStatement(sqlQuery, new String[]{"id"});
             if (event.getOwner() != null) {
                 ps.setLong(1, event.getOwner().getId());
             } else {

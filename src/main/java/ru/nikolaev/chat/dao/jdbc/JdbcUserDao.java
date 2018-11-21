@@ -25,21 +25,7 @@ import java.sql.SQLException;
 @Repository
 @PropertySource("classpath:queries.properties")
 public class JdbcUserDao implements UserDao {
-
-    private static final String ADD_NEW_USER_SQL =
-            "INSERT INTO ALL_USER (NAME, PASSWORD, ROLE_ID, STATUS_ID) VALUES (?,?,?,?)";
-
-    private static final String UPDATE_USER_SQL =
-            "UPDATE ALL_USER SET NAME = ?, ROLE_ID=?, STATUS_ID=? WHERE ID=?";
-
-    private static final String GET_USER_BY_ID_SQL =
-            "SELECT * FROM ALL_USER WHERE ID=?";
-
-    private static final String GET_USER_BY_NAME_SQL =
-            "SELECT * FROM ALL_USER WHERE NAME=?";
-
-    private static final String GET_USER_BY_NAME_AND_PASSWORD_SQL = "SELECT * FROM ALL_USER WHERE NAME=? AND PASSWORD = ?";
-
+    
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -84,7 +70,8 @@ public class JdbcUserDao implements UserDao {
 
         User user = null;
         try {
-            user = jdbcTemplate.queryForObject(GET_USER_BY_NAME_AND_PASSWORD_SQL, new UserRowMapper(), name, password);
+            String sqlQuery = env.getProperty("user.get.by.name.and.password");
+            user = jdbcTemplate.queryForObject(sqlQuery, new UserRowMapper(), name, password);
         } catch (DataAccessException e) {
             log.warn("User with this name and password not found.");
         }
@@ -100,7 +87,8 @@ public class JdbcUserDao implements UserDao {
 
         User user = null;
         try {
-            user = jdbcTemplate.queryForObject(GET_USER_BY_NAME_SQL, new UserRowMapper(), name);
+            String sqlQuery = env.getProperty("user.get.by.name");
+            user = jdbcTemplate.queryForObject(sqlQuery, new UserRowMapper(), name);
         } catch (DataAccessException e) {
             log.warn("User with name " + name);
         }
@@ -116,7 +104,8 @@ public class JdbcUserDao implements UserDao {
 
         User user = null;
         try {
-            user = jdbcTemplate.queryForObject(GET_USER_BY_ID_SQL, new UserRowMapper(), id);
+            String sqlQuery = env.getProperty("user.get.by.id");
+            user = jdbcTemplate.queryForObject(sqlQuery, new UserRowMapper(), id);
         } catch (DataAccessException e) {
             log.warn("User with id " + id + " not found.");
         }
@@ -135,9 +124,8 @@ public class JdbcUserDao implements UserDao {
 
         @Override
         public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-//            String sql = env.getProperty("user.add");
-
-            PreparedStatement ps = con.prepareStatement(ADD_NEW_USER_SQL, new String[]{"id"});
+            String sqlQuery = env.getProperty("user.new.add");
+            PreparedStatement ps = con.prepareStatement(sqlQuery, new String[]{"id"});
             ps.setString(1, user.getName());
             ps.setString(2, user.getPassword());
             ps.setLong(3, user.getUserRole().id());
@@ -155,8 +143,8 @@ public class JdbcUserDao implements UserDao {
 
         @Override
         public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-            //String sql = env.getProperty("user.update");
-            PreparedStatement ps = con.prepareStatement(UPDATE_USER_SQL, new String[]{"id"});
+            String sqlQuery = env.getProperty("user.update");
+            PreparedStatement ps = con.prepareStatement(sqlQuery, new String[]{"id"});
             ps.setString(1, user.getName());
             ps.setLong(2, user.getUserRole().id());
             ps.setLong(3, user.getUserStatus().id());
