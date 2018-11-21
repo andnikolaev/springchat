@@ -1,6 +1,7 @@
 package ru.nikolaev.chat.web.controller;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.DigestUtils;
@@ -24,6 +25,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "/api/sessions")
 public class SessionController {
@@ -42,7 +44,10 @@ public class SessionController {
     @Permission(role = UserRole.ANONYMOUS, exception = ChatExceptionEnum.USER_ALREADY_LOGIN)
     @ResponseStatus(HttpStatus.OK)
     public UserDto login(@Valid @RequestBody AuthUserDto userDto, Errors validationErrors, HttpServletRequest httpServletRequest) {
+        log.info("Start login " + userDto);
         if (validationErrors.hasErrors()) {
+            log.warn("Throwing new exception BadRequestDataException with validators error");
+            log.debug("Validators error" + validationErrors);
             new ExceptionThrower(new BadRequestDataException()).addValidationsError(validationErrors).throwException();
         }
         String name = userDto.getName();
@@ -50,7 +55,9 @@ public class SessionController {
         User user = authService.login(name, password, httpServletRequest.getRemoteAddr());
         onlineUser.setUser(user);
         onlineUserManager.addUser(user);
-        return modelMapperToDto.convertToUserDto(user);
+        UserDto resultUserDto = modelMapperToDto.convertToUserDto(user);
+        log.info("End login " + resultUserDto);
+        return resultUserDto;
     }
 
     @DeleteMapping
@@ -58,9 +65,11 @@ public class SessionController {
     @ResponseStatus(HttpStatus.OK)
     public void logout(HttpServletRequest httpServletRequest) {
         User logoutUser = onlineUser.getUser();
+        log.info("Start logout " + logoutUser);
         authService.logout(logoutUser, httpServletRequest.getRemoteAddr());
         onlineUserManager.removeUser(logoutUser);
         httpServletRequest.getSession().invalidate();
+        log.info("End logout " + logoutUser);
     }
 
     @GetMapping

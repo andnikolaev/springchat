@@ -24,10 +24,9 @@ import ru.nikolaev.chat.web.storage.OnlineUser;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "/api/users")
-@Slf4j
-@CrossOrigin
 public class UserController {
 
     @Autowired
@@ -46,26 +45,34 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @Permission(role = UserRole.ANONYMOUS)
     public UserDto registerUser(@Valid @RequestBody AuthUserDto userDto, Errors validationErrors, HttpServletRequest httpServletRequest) {
+        log.info("Start registerUser " + userDto);
         if (validationErrors.hasErrors()) {
+            log.warn("Throwing new exception BadRequestDataException with validators error");
+            log.debug("Validators error" + validationErrors);
             new ExceptionThrower(new BadRequestDataException()).addValidationsError(validationErrors).throwException();
         }
         String name = userDto.getName();
         String password = DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes());
         User user = authService.register(name, password, httpServletRequest.getRemoteAddr());
+        log.info("End registerUser " + user);
         return modelMapperToDto.convertToUserDto(user);
     }
 
     @Permission(role = UserRole.ADMIN)
     @DeleteMapping("/{id}/session")
     public EventDto kickUser(@PathVariable long id, HttpServletRequest httpServletRequest) {
+        log.info("Start kickUser with id = " + id);
         Event event = adminService.kickUser(onlineUser.getUser(), id, httpServletRequest.getRemoteAddr());
+        log.info("End kickUser " + event);
         return modelMapperToDto.convertToEventDto(event);
     }
 
     @Permission(role = UserRole.ADMIN)
     @PostMapping("/{id}/session")
     public UserDto updateUserStatus(@PathVariable long id, @RequestBody UserStatusDto userStatusDto, HttpServletRequest httpServletRequest) {
+        log.info("Start updateUserStatus  with id = " + id + "Status = " + userStatusDto);
         User user = adminService.updateUserStatus(onlineUser.getUser(), id, userStatusDto.getStatusId(), httpServletRequest.getRemoteAddr());
+        log.info("End updateUserStatus " + user);
         return modelMapperToDto.convertToUserDto(user);
     }
 
