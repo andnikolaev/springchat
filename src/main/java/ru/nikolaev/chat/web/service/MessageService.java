@@ -4,9 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.nikolaev.chat.dao.EventDao;
 import ru.nikolaev.chat.entity.Event;
-import ru.nikolaev.chat.enums.EventType;
-import ru.nikolaev.chat.entity.Message;
 import ru.nikolaev.chat.entity.User;
+import ru.nikolaev.chat.enums.EventType;
 
 import java.util.List;
 

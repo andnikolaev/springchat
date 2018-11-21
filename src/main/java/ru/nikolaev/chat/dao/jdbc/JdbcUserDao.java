@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -25,7 +24,7 @@ import java.sql.SQLException;
 @Repository
 @PropertySource("classpath:queries.properties")
 public class JdbcUserDao implements UserDao {
-    
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 

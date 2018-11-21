@@ -2,8 +2,6 @@ package ru.nikolaev.chat.dao;
 
 import ru.nikolaev.chat.entity.User;
 
-import java.util.List;
-
 public interface UserDao {
 
     User addUser(User user);

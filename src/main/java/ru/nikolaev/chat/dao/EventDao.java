@@ -2,7 +2,6 @@ package ru.nikolaev.chat.dao;
 
 import ru.nikolaev.chat.entity.Event;
 import ru.nikolaev.chat.enums.EventType;
-import ru.nikolaev.chat.entity.User;
 
 import java.util.List;
 

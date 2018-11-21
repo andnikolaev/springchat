@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 @Component
 @RequestScope
 @Data
-public class MessageDto {
+public class MessageTextDto {
     @Size(min = 1, max = 255)
     private String text;
 }
