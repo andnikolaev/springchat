@@ -17,11 +17,9 @@ public class User {
 
     private long id;
     private String name;
-    @JsonIgnore
     private String password;
     private UserStatus userStatus;
     private UserRole userRole;
-    @JsonIgnore
     private String ip;
 
     public User(long id) {

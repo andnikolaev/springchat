@@ -1,4 +1,4 @@
-package ru.nikolaev.chat.web.storage;
+package ru.nikolaev.chat.web.listener;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -8,6 +8,8 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import ru.nikolaev.chat.entity.User;
+import ru.nikolaev.chat.web.storage.OnlineUser;
+import ru.nikolaev.chat.web.storage.OnlineUserManager;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;

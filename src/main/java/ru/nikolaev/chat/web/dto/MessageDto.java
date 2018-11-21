@@ -1,10 +1,9 @@
-package ru.nikolaev.chat.dao.dto;
+package ru.nikolaev.chat.web.dto;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Component

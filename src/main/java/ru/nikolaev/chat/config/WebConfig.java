@@ -5,16 +5,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.*;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.enums.UserRole;
+import ru.nikolaev.chat.utility.ModelMapperToDto;
 import ru.nikolaev.chat.web.interceptor.UpdateCurrentOnlineUserInterceptor;
 import ru.nikolaev.chat.web.interceptor.UserAuthenticationInterceptor;
 import ru.nikolaev.chat.web.interceptor.UserPermissionInterceptor;
-
-import java.util.Locale;
 
 @Configuration
 @EnableWebMvc
@@ -62,6 +59,16 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(updateCurrentOnlineUserInterceptor()).addPathPatterns("/api/**");
         registry.addInterceptor(userPermissionInterceptor()).addPathPatterns("/api/**");
         registry.addInterceptor(userAuthenticationInterceptor()).addPathPatterns("/api/**");
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
+
+    @Bean
+    public ModelMapperToDto modelMapperToDto() {
+        return new ModelMapperToDto();
     }
 
     @Bean

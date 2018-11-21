@@ -1,4 +1,4 @@
-package ru.nikolaev.chat.dao.dto;
+package ru.nikolaev.chat.web.dto;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;
