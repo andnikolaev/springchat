@@ -3,9 +3,9 @@ package ru.nikolaev.chat.web.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.nikolaev.chat.web.dto.EventDto;
 import ru.nikolaev.chat.entity.Event;
 import ru.nikolaev.chat.utility.ModelMapperToDto;
+import ru.nikolaev.chat.web.dto.EventDto;
 import ru.nikolaev.chat.web.service.EventService;
 
 import java.util.List;
