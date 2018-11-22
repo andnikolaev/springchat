@@ -7,6 +7,10 @@ UsersView.prototype.renderUsersView = function (users, currentUser) {
 
     var elements = document.createElement('div');
     elements.classList.add("list-group");
+    users.sort(function (a, b) {
+            return a['_userRole'].localeCompare(b['_userRole']);
+        }
+    );
     users.forEach(function (user) {
         elements.appendChild(that.renderElement(user, currentUser));
     });
@@ -24,7 +28,6 @@ UsersView.prototype.renderElement = function (user, currentUser) {
     } else if (user.getUserRole().toUpperCase() === 'USER'.toUpperCase()) {
         element.classList.add('list-group-item-success');
         if (currentUser !== null && currentUser['userRole'].toUpperCase() === "ADMIN".toUpperCase()) {
-            console.dir(user.getId());
             var kickSpan = document.createElement('span');
             kickSpan.classList.add(user.getId());
             kickSpan.classList.add("kick");

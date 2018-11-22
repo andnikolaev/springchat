@@ -93,13 +93,11 @@ ChatView.prototype.updateUserList = function (userList) {
     var userListContainer = document.getElementById('user-list-container');
     userListContainer.innerHTML = "";
     userListContainer.appendChild(renderedUsersVies);
-    console.dir("ASDADSDASDSD");
     if (this._user !== null && this._user['userRole'].toUpperCase() === "ADMIN".toUpperCase()) {
 
         var kicksSpan = document.getElementsByClassName('kick');
         for (var i = 0; i < kicksSpan.length; i++) {
             kicksSpan[i].addEventListener('click', function (event) {
-                console.dir(event['toElement']['classList'][0]);
                 that._controller.kick(event['toElement']['classList'][0]);
             });
         }
@@ -107,7 +105,6 @@ ChatView.prototype.updateUserList = function (userList) {
         var bansSpan = document.getElementsByClassName('ban');
         for (var j = 0; j < bansSpan.length; j++) {
             bansSpan[j].addEventListener('click', function (event) {
-                console.dir(event);
                 that._controller.ban(event['toElement']['classList'][0]);
             });
         }
@@ -124,7 +121,6 @@ ChatView.prototype.updateCurrentUserHeader = function (user) {
         var authHeaderView = new AuthHeaderView();
         header = authHeaderView.renderAuthHeader();
         header.getElementsByClassName("login")[0].addEventListener('click', function (evt) {
-            console.dir(evt);
             that._controller.loadLoginPage();
         });
         header.getElementsByClassName("register")[0].addEventListener('click', function (evt) {

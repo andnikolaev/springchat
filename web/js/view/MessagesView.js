@@ -29,8 +29,13 @@ MessageView.prototype.renderMessage = function (message) {
 
         var spanInfo = document.createElement("span");
         spanInfo.classList.add("label");
+
+        if (message["_owner"]['userRole'].toUpperCase() === 'ADMIN'.toUpperCase()) {
+            spanInfo.classList.add('label-danger');
+        }
         if (message['_eventType'] !== "MESSAGE") {
-            spanInfo.classList.add("label-danger");
+            spanInfo.classList.remove("label-danger");
+            spanInfo.classList.add("label-primary");
             spanInfo.innerText = "SYSTEM";
         } else {
             spanInfo.classList.add("label-success");
