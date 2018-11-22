@@ -74,9 +74,9 @@ ChatView.prototype.init = function (user) {
 
     that.startRefreshing();
 
-    // var timerUsers = setInterval(function () {
-    //     that._controller.updateUsers();
-    // }, 4000);
+    var timerUsers = setInterval(function () {
+        that._controller.updateUsers();
+    }, 4000);
 };
 
 ChatView.prototype.startRefreshing = function () {

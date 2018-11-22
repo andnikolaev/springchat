@@ -66,7 +66,7 @@ function renderModalBody() {
 
     bodyContainer.appendChild(createLabel("userPassword", "Password:"));
     bodyContainer.appendChild(document.createElement('br'));
-    bodyContainer.appendChild(createInput("password", "userPassword", "text"));
+    bodyContainer.appendChild(createInput("password", "userPassword", "password"));
     bodyContainer.appendChild(document.createElement('br'));
     bodyContainer.appendChild(document.createElement('br'));
     bodyContainer.appendChild(createInput("submitIn", "submit-login", "submit", "Submit"));
