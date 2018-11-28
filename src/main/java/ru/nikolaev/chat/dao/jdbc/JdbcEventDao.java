@@ -14,6 +14,7 @@ import ru.nikolaev.chat.dao.EventDao;
 import ru.nikolaev.chat.dao.jdbc.mapper.EventRowMapper;
 import ru.nikolaev.chat.entity.Event;
 import ru.nikolaev.chat.enums.EventType;
+import ru.nikolaev.chat.exception.DataBaseAccessFailedException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -40,7 +41,9 @@ public class JdbcEventDao implements EventDao {
             String sqlQuery = env.getProperty("event.get.last.n");
             events = jdbcTemplate.query(sqlQuery, new EventRowMapper(), count);
         } catch (DataAccessException e) {
-            log.warn("Error getting last events");
+            //TODO Решать что делать. возможно выкидывать свое исключение наверх, и там обработать, что отдавать клиенту + логирование с error
+            log.error("Error getting last events", e);
+            throw new DataBaseAccessFailedException();
         }
         log.trace("Events:" + events);
         log.debug("End getLastEvents");
@@ -50,12 +53,13 @@ public class JdbcEventDao implements EventDao {
     @Override
     public List<Event> getLastEventsByType(EventType eventType, int count) {
         log.debug("Start getLastEventsByType, count = " + count);
-        List<Event> events = null;
+        List<Event> events;
         try {
             String sqlQuery = env.getProperty("event.get.last.n.by.type");
             events = jdbcTemplate.query(sqlQuery, new EventRowMapper(), eventType.id(), count);
         } catch (DataAccessException e) {
-            log.warn("Error getting last events");
+            log.error("Error getting last events", e);
+            throw new DataBaseAccessFailedException();
         }
         log.trace("Events:" + events);
         log.debug("End getLastEventsByType");
@@ -70,7 +74,8 @@ public class JdbcEventDao implements EventDao {
             String sqlQuery = env.getProperty("event.get.by.id");
             event = jdbcTemplate.queryForObject(sqlQuery, new EventRowMapper(), id);
         } catch (DataAccessException e) {
-            log.warn("Event with id " + id + " not found.");
+            log.error("Event with id " + id + " not found.", e);
+            throw new DataBaseAccessFailedException();
         }
         log.debug("End getEventById, result " + event);
         return event;
@@ -80,10 +85,15 @@ public class JdbcEventDao implements EventDao {
     public Event sendEvent(Event event) {
         log.info("Start sendEvent");
         log.debug("Event: " + event);
-
+        Event createdEvent;
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(new SendEventPreparedStatementCreator(event), keyHolder);
-        Event createdEvent = getEventById(keyHolder.getKey().intValue());
+        try {
+            jdbcTemplate.update(new SendEventPreparedStatementCreator(event), keyHolder);
+            createdEvent = getEventById(keyHolder.getKey().intValue());
+        } catch (DataAccessException e) {
+            log.error("Error send event", e);
+            throw new DataBaseAccessFailedException();
+        }
 
         log.debug("Created event: " + createdEvent);
         log.info("End sendEvent");
@@ -93,12 +103,13 @@ public class JdbcEventDao implements EventDao {
     @Override
     public Event getLastEventForUserByOwnerId(long ownerUserId) {
         log.debug("Start getLastEventForUserByOwnerId with user id= " + ownerUserId);
-        Event event = null;
+        Event event;
         try {
             String sqlQuery = env.getProperty("event.get.last.by.owner.id");
             event = jdbcTemplate.queryForObject(sqlQuery, new EventRowMapper(), ownerUserId);
         } catch (DataAccessException e) {
-            log.debug("Event for owner user with id " + ownerUserId + " not found.");
+            log.error("Event for owner user with id " + ownerUserId + " not found.", e);
+            throw new DataBaseAccessFailedException();
         }
         log.debug("End getLastEventForUserByOwnerId with user id = " + ownerUserId + " Event: " + event);
         return event;
@@ -107,12 +118,13 @@ public class JdbcEventDao implements EventDao {
     @Override
     public Event getLastEventForUserByAssigneeId(long assigneeUserId) {
         log.debug("Start getLastEventForUserByAssigneeId with user id= " + assigneeUserId);
-        Event event = null;
+        Event event;
         try {
             String sqlQuery = env.getProperty("event.get.last.by.assignee.id");
             event = jdbcTemplate.queryForObject(sqlQuery, new EventRowMapper(), assigneeUserId);
         } catch (DataAccessException e) {
-            log.debug("Event for assignee user with id " + assigneeUserId + " not found.");
+            log.error("Event for assignee user with id " + assigneeUserId + " not found.", e);
+            throw new DataBaseAccessFailedException();
         }
         log.debug("End getLastEventForUserByAssigneeId with user id= " + assigneeUserId + " Event: " + event);
         return event;

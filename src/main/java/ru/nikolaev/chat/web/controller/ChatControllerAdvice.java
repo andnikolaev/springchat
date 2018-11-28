@@ -2,10 +2,7 @@ package ru.nikolaev.chat.web.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.annotation.*;
 import ru.nikolaev.chat.exception.*;
 
 import java.util.List;
@@ -79,6 +76,15 @@ public class ChatControllerAdvice {
     List<String> processExceptionHandler(AccessDeniedException ex) {
         log.info("Handling AccessDeniedException");
         log.trace("AccessDeniedException", ex);
+        return ex.getErrorList();
+    }
+
+    @ExceptionHandler({DataBaseAccessFailedException.class})
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    List<String> processExceptionHandler(DataBaseAccessFailedException ex) {
+        log.info("Handling DataBaseAccessFailedException");
+        log.trace("DataBaseAccessFailedException", ex);
         return ex.getErrorList();
     }
 }

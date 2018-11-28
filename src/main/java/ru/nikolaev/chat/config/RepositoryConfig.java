@@ -20,8 +20,6 @@ import java.util.Locale;
 @PropertySource("classpath:datasource-cfg.properties")
 @EnableTransactionManagement
 public class RepositoryConfig {
-    // The Environment class serves as the property holder
-    // and stores all the properties loaded by the @PropertySource
     @Autowired
     private Environment env;
 
@@ -45,5 +43,5 @@ public class RepositoryConfig {
     public JdbcTemplate getJdbcTemplate(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
-    
+
 }

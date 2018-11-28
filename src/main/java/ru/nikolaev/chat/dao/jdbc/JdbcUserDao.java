@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import ru.nikolaev.chat.dao.UserDao;
 import ru.nikolaev.chat.dao.jdbc.mapper.UserRowMapper;
 import ru.nikolaev.chat.entity.User;
+import ru.nikolaev.chat.exception.DataBaseAccessFailedException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,11 +36,15 @@ public class JdbcUserDao implements UserDao {
     public User addUser(User user) {
         log.info("Start addUser");
         log.debug("Adding user: " + user);
-
+        User addedUser;
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(new AddUserPreparedStatementCreator(user), keyHolder);
-        User addedUser = getUserById(keyHolder.getKey().intValue());
-
+        try {
+            jdbcTemplate.update(new AddUserPreparedStatementCreator(user), keyHolder);
+            addedUser = getUserById(keyHolder.getKey().intValue());
+        } catch (DataAccessException e) {
+            log.error("Failed add user", e);
+            throw new DataBaseAccessFailedException();
+        }
         log.debug("Added user:" + addedUser);
         log.info("End addUser");
         return addedUser;
@@ -54,7 +59,8 @@ public class JdbcUserDao implements UserDao {
         try {
             jdbcTemplate.update(new UpdateUserPreparedStatementCreator(user), keyHolder);
         } catch (DataAccessException e) {
-            log.warn("User for updating not found");
+            log.error("User for updating not found", e);
+            throw new DataBaseAccessFailedException();
         }
         User updatedUser = getUserById(user.getId());
 
@@ -72,7 +78,8 @@ public class JdbcUserDao implements UserDao {
             String sqlQuery = env.getProperty("user.get.by.name.and.password");
             user = jdbcTemplate.queryForObject(sqlQuery, new UserRowMapper(), name, password);
         } catch (DataAccessException e) {
-            log.warn("User with this name and password not found.");
+            log.error("User with this name and password not found.", e);
+            throw new DataBaseAccessFailedException();
         }
 
         log.debug("User:" + user);
@@ -89,7 +96,8 @@ public class JdbcUserDao implements UserDao {
             String sqlQuery = env.getProperty("user.get.by.name");
             user = jdbcTemplate.queryForObject(sqlQuery, new UserRowMapper(), name);
         } catch (DataAccessException e) {
-            log.warn("User with name " + name);
+            log.error("User with name {} ", name, e);
+            throw new DataBaseAccessFailedException();
         }
 
         log.debug("User:" + user);
@@ -101,12 +109,13 @@ public class JdbcUserDao implements UserDao {
     public User getUserById(long id) {
         log.debug("Start getUserById for user with id " + id);
 
-        User user = null;
+        User user;
         try {
             String sqlQuery = env.getProperty("user.get.by.id");
             user = jdbcTemplate.queryForObject(sqlQuery, new UserRowMapper(), id);
         } catch (DataAccessException e) {
-            log.warn("User with id " + id + " not found.");
+            log.error("User with id {} not found.", id, e);
+            throw new DataBaseAccessFailedException();
         }
 
         log.debug("End getUserById for user with id " + id + " User: " + user);
