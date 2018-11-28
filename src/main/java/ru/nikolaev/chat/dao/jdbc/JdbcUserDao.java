@@ -73,7 +73,7 @@ public class JdbcUserDao implements UserDao {
     public User checkAuth(String name, String password) {
         log.info("Start checkAuth for user with name " + name);
 
-        User user = null;
+        User user;
         try {
             String sqlQuery = env.getProperty("user.get.by.name.and.password");
             user = jdbcTemplate.queryForObject(sqlQuery, new UserRowMapper(), name, password);
@@ -91,7 +91,7 @@ public class JdbcUserDao implements UserDao {
     public User getUserByName(String name) {
         log.info("Start getUserByName for user with name " + name);
 
-        User user = null;
+        User user;
         try {
             String sqlQuery = env.getProperty("user.get.by.name");
             user = jdbcTemplate.queryForObject(sqlQuery, new UserRowMapper(), name);

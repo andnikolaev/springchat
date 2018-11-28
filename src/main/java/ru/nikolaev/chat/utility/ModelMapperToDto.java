@@ -12,12 +12,10 @@ public class ModelMapperToDto {
     private ModelMapper modelMapper;
 
     public UserDto convertToUserDto(User user) {
-        UserDto userDto = modelMapper.map(user, UserDto.class);
-        return userDto;
+        return modelMapper.map(user, UserDto.class);
     }
 
     public EventDto convertToEventDto(Event event) {
-        EventDto eventDto = modelMapper.map(event, EventDto.class);
-        return eventDto;
+        return modelMapper.map(event, EventDto.class);
     }
 }

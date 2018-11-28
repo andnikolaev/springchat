@@ -16,7 +16,6 @@ public class UserService {
 
 
     public User getUserWithActualData(User user) {
-        User currentUser = userDao.getUserById(user.getId());
-        return currentUser;
+        return userDao.getUserById(user.getId());
     }
 }

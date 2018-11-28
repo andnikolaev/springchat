@@ -16,8 +16,7 @@ public class EventService {
     private EventDao eventDao;
 
     public List<Event> getLastEvents(int count) {
-        List<Event> eventList = eventDao.getLastEvents(count);
-        return eventList;
+        return eventDao.getLastEvents(count);
     }
 
     public Event sendEvent(User owner, EventType eventType, String ownerIp) {

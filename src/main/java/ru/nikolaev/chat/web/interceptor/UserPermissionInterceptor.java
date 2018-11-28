@@ -20,7 +20,7 @@ public class UserPermissionInterceptor implements HandlerInterceptor {
     private OnlineUser onlineUser;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         log.debug("Start preHandle");
         boolean result = false;
         if (handler instanceof HandlerMethod) {
@@ -37,7 +37,7 @@ public class UserPermissionInterceptor implements HandlerInterceptor {
 //                Arrays.stream(methodPermissionAnnotation.role()).anyMatch(x -> x.equals(user.getUserRole()));
                 if (!result) {
                     ChatException exception = methodPermissionAnnotation.exception().getChatException();
-                    log.warn("User hasn`t access, throwing " , exception);
+                    log.error("User hasn`t access, throwing ");
                     throw exception;
                 }
             } else {

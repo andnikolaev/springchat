@@ -25,7 +25,7 @@ public class UserAuthenticationInterceptor implements HandlerInterceptor {
     private EventService eventService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         log.debug("Start preHandle");
         User currentUser = onlineUser.getUser();
         if (currentUser.getId() != 0) {

@@ -36,7 +36,7 @@ public class JdbcEventDao implements EventDao {
     @Override
     public List<Event> getLastEvents(int count) {
         log.debug("Start getLastEvents, count = " + count);
-        List<Event> events = null;
+        List<Event> events;
         try {
             String sqlQuery = env.getProperty("event.get.last.n");
             events = jdbcTemplate.query(sqlQuery, new EventRowMapper(), count);
@@ -69,7 +69,7 @@ public class JdbcEventDao implements EventDao {
     @Override
     public Event getEventById(long id) {
         log.debug("Start getEventById with id= " + id);
-        Event event = null;
+        Event event;
         try {
             String sqlQuery = env.getProperty("event.get.by.id");
             event = jdbcTemplate.queryForObject(sqlQuery, new EventRowMapper(), id);

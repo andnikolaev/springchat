@@ -22,7 +22,6 @@ public class MessageService {
     }
 
     public List<Event> getLastMessages(int count) {
-        List<Event> messageList = eventDao.getLastEventsByType(EventType.MESSAGE, count);
-        return messageList;
+        return eventDao.getLastEventsByType(EventType.MESSAGE, count);
     }
 }

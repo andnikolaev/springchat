@@ -22,7 +22,7 @@ public class UpdateCurrentOnlineUserInterceptor implements HandlerInterceptor {
     private UserService userService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         log.debug("Start preHandle");
         User currentOnlineUser = onlineUser.getUser();
         if (currentOnlineUser.getId() != 0) {
