@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.web.service.UserService;
-import ru.nikolaev.chat.web.storage.OnlineUser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 public class UpdateCurrentOnlineUserInterceptor implements HandlerInterceptor {
 
     @Autowired
-    private OnlineUser onlineUser;
+    private User onlineUser;
 
     @Autowired
     private UserService userService;
@@ -24,10 +23,9 @@ public class UpdateCurrentOnlineUserInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         log.debug("Start preHandle");
-        User currentOnlineUser = onlineUser.getUser();
-        if (currentOnlineUser.getId() != 0) {
-            User actualUser = userService.getUserWithActualData(currentOnlineUser);
-            onlineUser.setUser(actualUser);
+        if (onlineUser.getId() != 0) {
+            User actualUser = userService.getUserWithActualData(onlineUser);
+            onlineUser = actualUser;
             log.debug("Current user " + actualUser + " Actual user" + actualUser);
         } else {
             log.debug("Online user doest`t exist");

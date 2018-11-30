@@ -19,7 +19,6 @@ import ru.nikolaev.chat.web.dto.UserDto;
 import ru.nikolaev.chat.web.dto.UserStatusDto;
 import ru.nikolaev.chat.web.service.AdminService;
 import ru.nikolaev.chat.web.service.AuthService;
-import ru.nikolaev.chat.web.storage.OnlineUser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -30,7 +29,7 @@ import javax.validation.Valid;
 public class UserController {
 
     @Autowired
-    private OnlineUser onlineUser;
+    private User onlineUser;
 
     @Autowired
     private AuthService authService;
@@ -62,7 +61,7 @@ public class UserController {
     @DeleteMapping("/{id}/session")
     public EventDto kickUser(@PathVariable long id, HttpServletRequest httpServletRequest) {
         log.info("Start kickUser with id = " + id);
-        Event event = adminService.kickUser(onlineUser.getUser(), id, httpServletRequest.getRemoteAddr());
+        Event event = adminService.kickUser(onlineUser, id, httpServletRequest.getRemoteAddr());
         log.info("End kickUser " + event);
         return modelMapperToDto.convertToEventDto(event);
     }
@@ -71,7 +70,7 @@ public class UserController {
     @PostMapping("/{id}/session")
     public UserDto updateUserStatus(@PathVariable long id, @RequestBody UserStatusDto userStatusDto, HttpServletRequest httpServletRequest) {
         log.info("Start updateUserStatus  with id = " + id + "Status = " + userStatusDto);
-        User user = adminService.updateUserStatus(onlineUser.getUser(), id, userStatusDto.getStatusId(), httpServletRequest.getRemoteAddr());
+        User user = adminService.updateUserStatus(onlineUser, id, userStatusDto.getStatusId(), httpServletRequest.getRemoteAddr());
         log.info("End updateUserStatus " + user);
         return modelMapperToDto.convertToUserDto(user);
     }
@@ -79,7 +78,7 @@ public class UserController {
     @GetMapping("/session")
     @Permission(role = {UserRole.USER, UserRole.ADMIN})
     public UserDto getCurrentUser() {
-        return modelMapperToDto.convertToUserDto(onlineUser.getUser());
+        return modelMapperToDto.convertToUserDto(onlineUser);
     }
 
 }

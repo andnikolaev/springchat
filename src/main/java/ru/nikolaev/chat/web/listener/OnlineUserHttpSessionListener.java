@@ -8,7 +8,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import ru.nikolaev.chat.entity.User;
-import ru.nikolaev.chat.web.storage.OnlineUser;
 import ru.nikolaev.chat.web.storage.OnlineUserManager;
 
 import javax.servlet.http.HttpSession;
@@ -35,9 +34,8 @@ public class OnlineUserHttpSessionListener implements HttpSessionListener, Appli
         Enumeration<String> sessionsAttribute = session.getAttributeNames();
         while (sessionsAttribute.hasMoreElements()) {
             Object object = session.getAttribute(sessionsAttribute.nextElement());
-            if (object instanceof OnlineUser) {
-                OnlineUser onlineUser = (OnlineUser) object;
-                User user = onlineUser.getUser();
+            if (object instanceof User) {
+                User user = (User) object;
                 onlineUserManager.removeUser(user);
                 log.info("Session destroyed for user" + user);
             }

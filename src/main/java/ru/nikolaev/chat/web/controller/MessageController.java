@@ -9,6 +9,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import ru.nikolaev.chat.annotation.Permission;
 import ru.nikolaev.chat.entity.Event;
+import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.enums.UserRole;
 import ru.nikolaev.chat.exception.BadRequestDataException;
 import ru.nikolaev.chat.exception.ExceptionThrower;
@@ -17,7 +18,6 @@ import ru.nikolaev.chat.web.dto.EventDto;
 import ru.nikolaev.chat.web.dto.MessageCountDto;
 import ru.nikolaev.chat.web.dto.MessageTextDto;
 import ru.nikolaev.chat.web.service.MessageService;
-import ru.nikolaev.chat.web.storage.OnlineUser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/api/messages")
 public class MessageController {
     @Autowired
-    private OnlineUser onlineUser;
+    private User onlineUser;
 
     @Autowired
     private MessageService messageService;
@@ -51,7 +51,7 @@ public class MessageController {
             log.debug("Validators error" + validationErrors);
             new ExceptionThrower(new BadRequestDataException()).addValidationsError(validationErrors).throwException();
         }
-        Event event = messageService.sendMessage(onlineUser.getUser(), messageDto.getText(), httpServletRequest.getRemoteAddr());
+        Event event = messageService.sendMessage(onlineUser, messageDto.getText(), httpServletRequest.getRemoteAddr());
         log.info("End sendMessage, event:" + event);
         return modelMapperToDto.convertToEventDto(event);
     }

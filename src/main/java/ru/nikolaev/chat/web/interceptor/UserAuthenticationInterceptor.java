@@ -10,7 +10,6 @@ import ru.nikolaev.chat.enums.UserStatus;
 import ru.nikolaev.chat.exception.UserBannedException;
 import ru.nikolaev.chat.exception.UserKickedException;
 import ru.nikolaev.chat.web.service.EventService;
-import ru.nikolaev.chat.web.storage.OnlineUser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class UserAuthenticationInterceptor implements HandlerInterceptor {
     @Autowired
-    private OnlineUser onlineUser;
+    private User onlineUser;
 
     @Autowired
     private EventService eventService;
@@ -27,7 +26,7 @@ public class UserAuthenticationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         log.debug("Start preHandle");
-        User currentUser = onlineUser.getUser();
+        User currentUser = onlineUser;
         if (currentUser.getId() != 0) {
             UserStatus currentUserStatus = currentUser.getUserStatus();
 

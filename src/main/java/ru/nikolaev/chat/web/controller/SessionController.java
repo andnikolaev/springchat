@@ -17,7 +17,6 @@ import ru.nikolaev.chat.utility.ModelMapperToDto;
 import ru.nikolaev.chat.web.dto.AuthUserDto;
 import ru.nikolaev.chat.web.dto.UserDto;
 import ru.nikolaev.chat.web.service.AuthService;
-import ru.nikolaev.chat.web.storage.OnlineUser;
 import ru.nikolaev.chat.web.storage.OnlineUserManager;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +29,7 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/api/sessions")
 public class SessionController {
     @Autowired
-    private OnlineUser onlineUser;
+    private User onlineUser;
 
     @Autowired
     private OnlineUserManager onlineUserManager;
@@ -53,7 +52,7 @@ public class SessionController {
         String name = userDto.getName();
         String password = DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes());
         User user = authService.login(name, password, httpServletRequest.getRemoteAddr());
-        onlineUser.setUser(user);
+        onlineUser = user;
         onlineUserManager.addUser(user);
         UserDto resultUserDto = modelMapperToDto.convertToUserDto(user);
         log.info("End login " + resultUserDto);
@@ -64,7 +63,7 @@ public class SessionController {
     @Permission(role = {UserRole.ADMIN, UserRole.USER})
     @ResponseStatus(HttpStatus.OK)
     public void logout(HttpServletRequest httpServletRequest) {
-        User logoutUser = onlineUser.getUser();
+        User logoutUser = onlineUser;
         log.info("Start logout " + logoutUser);
         authService.logout(logoutUser, httpServletRequest.getRemoteAddr());
         onlineUserManager.removeUser(logoutUser);

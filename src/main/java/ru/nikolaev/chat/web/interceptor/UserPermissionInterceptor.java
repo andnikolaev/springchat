@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import ru.nikolaev.chat.annotation.Permission;
+import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.enums.UserRole;
 import ru.nikolaev.chat.exception.ChatException;
-import ru.nikolaev.chat.web.storage.OnlineUser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class UserPermissionInterceptor implements HandlerInterceptor {
     @Autowired
-    private OnlineUser onlineUser;
+    private User onlineUser;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -29,7 +29,7 @@ public class UserPermissionInterceptor implements HandlerInterceptor {
                 Permission methodPermissionAnnotation = handlerMethod.getMethodAnnotation(Permission.class);
                 log.debug("Permission annotation " + methodPermissionAnnotation);
                 for (UserRole userRole : methodPermissionAnnotation.role()) {
-                    if (userRole.equals(onlineUser.getUser().getUserRole())) {
+                    if (userRole.equals(onlineUser.getUserRole())) {
                         log.debug("User has access");
                         result = true;
                     }

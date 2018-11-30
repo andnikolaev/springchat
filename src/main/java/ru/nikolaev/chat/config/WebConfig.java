@@ -1,10 +1,7 @@
 package ru.nikolaev.chat.config;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.*;
 import org.springframework.web.servlet.config.annotation.*;
 import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.enums.UserRole;
@@ -72,7 +69,7 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    @Scope("prototype")
+    @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public User user() {
         User user = new User();
         user.setUserRole(UserRole.ANONYMOUS);
