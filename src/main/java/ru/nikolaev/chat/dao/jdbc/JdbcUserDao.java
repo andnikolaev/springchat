@@ -37,8 +37,7 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public User addUser(User user) {
-        log.info("Start addUser");
-        log.debug("Adding user: " + user);
+        log.info("Start addUser = {}", user);
         User addedUser;
         KeyHolder keyHolder = new GeneratedKeyHolder();
         try {
@@ -48,8 +47,7 @@ public class JdbcUserDao implements UserDao {
             log.error("Failed add user", e);
             throw new DataBaseAccessFailedException();
         }
-        log.debug("Added user:" + addedUser);
-        log.info("End addUser");
+        log.info("End addUser = {}", addedUser);
         return addedUser;
     }
 

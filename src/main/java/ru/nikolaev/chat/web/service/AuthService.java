@@ -10,10 +10,7 @@ import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.enums.EventType;
 import ru.nikolaev.chat.enums.UserRole;
 import ru.nikolaev.chat.enums.UserStatus;
-import ru.nikolaev.chat.exception.UserAlreadyExistException;
-import ru.nikolaev.chat.exception.UserBannedException;
-import ru.nikolaev.chat.exception.UserLoginFailedException;
-import ru.nikolaev.chat.exception.UserNotFoundException;
+import ru.nikolaev.chat.exception.*;
 
 @Slf4j
 @Service
@@ -23,7 +20,7 @@ public class AuthService {
     @Autowired
     private UserDao userDao;
 
-    @Transactional
+    @Transactional(value = "tran", rollbackFor = ChatException.class)
     public User register(String name, String password, String ip) {
         if (userDao.getUserByName(name).isPresent()) {
             throw new UserAlreadyExistException();
@@ -38,6 +35,7 @@ public class AuthService {
         return user;
     }
 
+    @Transactional(value = "tran")
     public User login(String name, String password, String ip) {
         User user;
         try {

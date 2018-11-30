@@ -6,6 +6,7 @@ import ru.nikolaev.chat.dao.EventDao;
 import ru.nikolaev.chat.entity.Event;
 import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.enums.EventType;
+import ru.nikolaev.chat.exception.ChatException;
 
 import java.util.List;
 
@@ -20,7 +21,8 @@ public class EventService {
     }
 
     public Event sendEvent(User owner, EventType eventType, String ownerIp) {
-        return this.sendEvent(owner, null, eventType, ownerIp);
+        throw new ChatException();
+        //return this.sendEvent(owner, null, eventType, ownerIp);
     }
 
     public Event sendEvent(User owner, User assignee, EventType eventType, String ownerIp) {
