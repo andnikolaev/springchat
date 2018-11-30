@@ -43,7 +43,6 @@ public class JdbcEventDao implements EventDao {
             String sqlQuery = env.getProperty("sql.event.get.last.n");
             events = jdbcTemplate.query(sqlQuery, new EventRowMapper(), count);
         } catch (DataAccessException e) {
-            //TODO Решать что делать. возможно выкидывать свое исключение наверх, и там обработать, что отдавать клиенту + логирование с error
             log.error("Error getting last events", e);
             throw new DataBaseAccessFailedException();
         }
