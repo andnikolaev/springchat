@@ -8,6 +8,7 @@ import ru.nikolaev.chat.entity.Event;
 import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.enums.EventType;
 import ru.nikolaev.chat.enums.UserStatus;
+import ru.nikolaev.chat.exception.UserNotFoundException;
 
 @Slf4j
 @Service
@@ -24,22 +25,23 @@ public class AdminService {
 
     public User banUser(User owner, long banedUserId, String ownerIp) {
         log.info("Start banUser() with id " + banedUserId + " from admin " + owner);
-        User bannedUser = userDao.getUserById(banedUserId);
+        User bannedUser = userDao.getUserById(banedUserId).orElseThrow(UserNotFoundException::new);
         bannedUser.setUserStatus(UserStatus.BANNED);
-        userDao.updateUser(bannedUser);
+        User resultUser = userDao.updateUser(bannedUser);
+
         eventService.sendEvent(owner, new User(banedUserId), EventType.BANNED, ownerIp);
-        User resultUser = userDao.getUserById(banedUserId);
+
         log.info("End banUser() user " + resultUser);
         return resultUser;
     }
 
     public User deleteUser(User owner, long deletedUserId, String ownerIp) {
         log.info("Start deleteUser() with id " + deletedUserId + " from admin " + owner);
-        User bannedUser = userDao.getUserById(deletedUserId);
+        User bannedUser = userDao.getUserById(deletedUserId).orElseThrow(UserNotFoundException::new);
         bannedUser.setUserStatus(UserStatus.DELETED);
-        userDao.updateUser(owner);
+        User resultDeletedUser = userDao.updateUser(owner);
+
         eventService.sendEvent(owner, new User(deletedUserId), EventType.DELETED, ownerIp);
-        User resultDeletedUser = userDao.getUserById(deletedUserId);
         log.info("End banUser() user " + resultDeletedUser);
         return resultDeletedUser;
     }

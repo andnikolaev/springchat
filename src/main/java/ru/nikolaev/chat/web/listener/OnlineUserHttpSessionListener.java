@@ -25,12 +25,12 @@ public class OnlineUserHttpSessionListener implements HttpSessionListener, Appli
 
     @Override
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
-
+        log.info("New sessionCreated() id = {}", httpSessionEvent.getSession().getId());
     }
 
     @Override
     public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
-        log.info("Start sessionDestroyed");
+        log.info("Start sessionDestroyed sessionId = {}", httpSessionEvent.getSession().getId());
         HttpSession session = httpSessionEvent.getSession();
         Enumeration<String> sessionsAttribute = session.getAttributeNames();
         while (sessionsAttribute.hasMoreElements()) {
@@ -42,7 +42,7 @@ public class OnlineUserHttpSessionListener implements HttpSessionListener, Appli
                 log.info("Session destroyed for user" + user);
             }
         }
-        log.info("End sessionDestroyed");
+        log.info("End sessionDestroyed id = {}", httpSessionEvent.getSession().getId());
     }
 
     @Override

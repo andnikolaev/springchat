@@ -1,6 +1,7 @@
 package ru.nikolaev.chat.web.service;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,11 +10,12 @@ import ru.nikolaev.chat.entity.User;
 import ru.nikolaev.chat.enums.EventType;
 import ru.nikolaev.chat.enums.UserRole;
 import ru.nikolaev.chat.enums.UserStatus;
-import ru.nikolaev.chat.exception.ExceptionThrower;
 import ru.nikolaev.chat.exception.UserAlreadyExistException;
 import ru.nikolaev.chat.exception.UserBannedException;
 import ru.nikolaev.chat.exception.UserLoginFailedException;
+import ru.nikolaev.chat.exception.UserNotFoundException;
 
+@Slf4j
 @Service
 public class AuthService {
     @Autowired
@@ -23,9 +25,8 @@ public class AuthService {
 
     @Transactional
     public User register(String name, String password, String ip) {
-        User existingUser = userDao.getUserByName(name);
-        if (existingUser != null) {
-            new ExceptionThrower(new UserAlreadyExistException()).throwException();
+        if (userDao.getUserByName(name).isPresent()) {
+            throw new UserAlreadyExistException();
         }
         User user = new User();
         user.setName(name);
@@ -38,8 +39,11 @@ public class AuthService {
     }
 
     public User login(String name, String password, String ip) {
-        User user = userDao.checkAuth(name, password);
-        if (user == null) {
+        User user;
+        try {
+            user = userDao.checkAuth(name, password);
+        } catch (UserNotFoundException e) {
+            log.warn("Throwing UserLoginFailedException");
             throw new UserLoginFailedException();
         }
         if (UserStatus.BANNED.equals(user.getUserStatus())) {

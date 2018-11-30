@@ -1,17 +1,20 @@
 package ru.nikolaev.chat.dao;
 
 import ru.nikolaev.chat.entity.User;
+import ru.nikolaev.chat.exception.FailedAddUserException;
+
+import java.util.Optional;
 
 public interface UserDao {
 
-    User addUser(User user);
+    User addUser(User user) throws FailedAddUserException;
 
     User updateUser(User user);
 
     User checkAuth(String name, String password);
 
-    User getUserByName(String name);
+    Optional<User> getUserByName(String name);
 
-    User getUserById(long id);
+    Optional<User> getUserById(long id);
 
 }

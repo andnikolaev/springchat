@@ -2,10 +2,14 @@ package ru.nikolaev.chat.web.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.nikolaev.chat.exception.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @RestControllerAdvice
@@ -86,5 +90,21 @@ public class ChatControllerAdvice {
         log.info("Handling DataBaseAccessFailedException");
         log.trace("DataBaseAccessFailedException", ex);
         return ex.getErrorList();
+    }
+
+    @ExceptionHandler({NoSuchElementException.class})
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    void processExceptionHandler(NoSuchElementException ex) {
+        log.info("Handling NoSuchElementException");
+        log.trace("NoSuchElementException", ex);
+    }
+
+    @ExceptionHandler({UserNotFoundException.class})
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    void processExceptionHandler(UserNotFoundException ex) {
+        log.info("Handling UserNotFoundException");
+        log.trace("UserNotFoundException", ex);
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -21,6 +22,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Slf4j
@@ -67,12 +69,14 @@ public class JdbcEventDao implements EventDao {
     }
 
     @Override
-    public Event getEventById(long id) {
+    public Optional<Event> getEventById(long id) {
         log.debug("Start getEventById with id= " + id);
-        Event event;
+        Optional<Event> event = Optional.empty();
         try {
             String sqlQuery = env.getProperty("event.get.by.id");
-            event = jdbcTemplate.queryForObject(sqlQuery, new EventRowMapper(), id);
+            event = Optional.of(jdbcTemplate.queryForObject(sqlQuery, new EventRowMapper(), id));
+        } catch (EmptyResultDataAccessException e) {
+            log.warn("Event with id = {} not exist.", id);
         } catch (DataAccessException e) {
             log.error("Event with id " + id + " not found.", e);
             throw new DataBaseAccessFailedException();
@@ -89,7 +93,7 @@ public class JdbcEventDao implements EventDao {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         try {
             jdbcTemplate.update(new SendEventPreparedStatementCreator(event), keyHolder);
-            createdEvent = getEventById(keyHolder.getKey().intValue());
+            createdEvent = getEventById(keyHolder.getKey().intValue()).orElse(null);
         } catch (DataAccessException e) {
             log.error("Error send event", e);
             throw new DataBaseAccessFailedException();
@@ -101,12 +105,14 @@ public class JdbcEventDao implements EventDao {
     }
 
     @Override
-    public Event getLastEventForUserByOwnerId(long ownerUserId) {
+    public Optional<Event> getLastEventForUserByOwnerId(long ownerUserId) {
         log.debug("Start getLastEventForUserByOwnerId with user id= " + ownerUserId);
-        Event event;
+        Optional<Event> event = Optional.empty();
         try {
             String sqlQuery = env.getProperty("event.get.last.by.owner.id");
-            event = jdbcTemplate.queryForObject(sqlQuery, new EventRowMapper(), ownerUserId);
+            event = Optional.of(jdbcTemplate.queryForObject(sqlQuery, new EventRowMapper(), ownerUserId));
+        } catch (EmptyResultDataAccessException e) {
+            log.warn("Event for owner user with id = {} not exist.", ownerUserId);
         } catch (DataAccessException e) {
             log.error("Event for owner user with id " + ownerUserId + " not found.", e);
             throw new DataBaseAccessFailedException();
@@ -116,12 +122,14 @@ public class JdbcEventDao implements EventDao {
     }
 
     @Override
-    public Event getLastEventForUserByAssigneeId(long assigneeUserId) {
+    public Optional<Event> getLastEventForUserByAssigneeId(long assigneeUserId) {
         log.debug("Start getLastEventForUserByAssigneeId with user id= " + assigneeUserId);
-        Event event;
+        Optional<Event> event = Optional.empty();
         try {
             String sqlQuery = env.getProperty("event.get.last.by.assignee.id");
-            event = jdbcTemplate.queryForObject(sqlQuery, new EventRowMapper(), assigneeUserId);
+            event = Optional.of(jdbcTemplate.queryForObject(sqlQuery, new EventRowMapper(), assigneeUserId));
+        } catch (EmptyResultDataAccessException e) {
+            log.trace("Event for assignee user with id = {} not exist.", assigneeUserId);
         } catch (DataAccessException e) {
             log.error("Event for assignee user with id " + assigneeUserId + " not found.", e);
             throw new DataBaseAccessFailedException();

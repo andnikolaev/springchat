@@ -4,6 +4,7 @@ import ru.nikolaev.chat.entity.Event;
 import ru.nikolaev.chat.enums.EventType;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EventDao {
 
@@ -11,11 +12,11 @@ public interface EventDao {
 
     List<Event> getLastEventsByType(EventType eventType, int count);
 
-    Event getEventById(long id);
+    Optional<Event> getEventById(long id);
 
     Event sendEvent(Event event);
 
-    Event getLastEventForUserByOwnerId(long ownerUserId);
+    Optional<Event> getLastEventForUserByOwnerId(long ownerUserId);
 
-    Event getLastEventForUserByAssigneeId(long assigneeUserId);
+    Optional<Event> getLastEventForUserByAssigneeId(long assigneeUserId);
 }

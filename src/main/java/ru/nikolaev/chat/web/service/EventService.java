@@ -44,8 +44,8 @@ public class EventService {
     }
 
     public Event getLastEventForUser(User user) {
-        Event ownerEvent = eventDao.getLastEventForUserByOwnerId(user.getId());
-        Event assigneeEvent = eventDao.getLastEventForUserByAssigneeId(user.getId());
+        Event ownerEvent = eventDao.getLastEventForUserByOwnerId(user.getId()).get();
+        Event assigneeEvent = eventDao.getLastEventForUserByAssigneeId(user.getId()).orElse(null);
         if (assigneeEvent == null) {
             return ownerEvent;
         }
