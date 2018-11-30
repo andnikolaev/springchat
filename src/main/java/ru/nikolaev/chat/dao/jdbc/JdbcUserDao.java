@@ -80,7 +80,7 @@ public class JdbcUserDao implements UserDao {
 
         User user;
         try {
-            String sqlQuery = env.getProperty("user.get.by.name.and.password");
+            String sqlQuery = env.getProperty("sql.user.get.by.name.and.password");
             user = jdbcTemplate.queryForObject(sqlQuery, new UserRowMapper(), name, password);
         } catch (EmptyResultDataAccessException e) {
             log.warn("User with name = {} and password not found.", name);
@@ -101,7 +101,7 @@ public class JdbcUserDao implements UserDao {
 
         Optional<User> optionalUser = Optional.empty();
         try {
-            String sqlQuery = env.getProperty("user.get.by.name");
+            String sqlQuery = env.getProperty("sql.user.get.by.name");
             optionalUser = Optional.of(jdbcTemplate.queryForObject(sqlQuery, new UserRowMapper(), name));
         } catch (EmptyResultDataAccessException e) {
             log.warn("User with name = {} not exist.", name);
@@ -120,7 +120,7 @@ public class JdbcUserDao implements UserDao {
 
         Optional<User> optionalUser = Optional.empty();
         try {
-            String sqlQuery = env.getProperty("user.get.by.id");
+            String sqlQuery = env.getProperty("sql.user.get.by.id");
             optionalUser = Optional.of(jdbcTemplate.queryForObject(sqlQuery, new UserRowMapper(), id));
         } catch (EmptyResultDataAccessException e) {
             log.warn("User with id = {} not found.", id);
@@ -143,7 +143,7 @@ public class JdbcUserDao implements UserDao {
 
         @Override
         public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-            String sqlQuery = env.getProperty("user.new.add");
+            String sqlQuery = env.getProperty("sql.user.new.add");
             PreparedStatement ps = con.prepareStatement(sqlQuery, new String[]{"id"});
             ps.setString(1, user.getName());
             ps.setString(2, user.getPassword());
@@ -162,7 +162,7 @@ public class JdbcUserDao implements UserDao {
 
         @Override
         public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-            String sqlQuery = env.getProperty("user.update");
+            String sqlQuery = env.getProperty("sql.user.update");
             PreparedStatement ps = con.prepareStatement(sqlQuery, new String[]{"id"});
             ps.setString(1, user.getName());
             ps.setLong(2, user.getUserRole().id());

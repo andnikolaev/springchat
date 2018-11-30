@@ -40,7 +40,7 @@ public class JdbcEventDao implements EventDao {
         log.debug("Start getLastEvents, count = " + count);
         List<Event> events;
         try {
-            String sqlQuery = env.getProperty("event.get.last.n");
+            String sqlQuery = env.getProperty("sql.event.get.last.n");
             events = jdbcTemplate.query(sqlQuery, new EventRowMapper(), count);
         } catch (DataAccessException e) {
             //TODO Решать что делать. возможно выкидывать свое исключение наверх, и там обработать, что отдавать клиенту + логирование с error
@@ -57,7 +57,7 @@ public class JdbcEventDao implements EventDao {
         log.debug("Start getLastEventsByType, count = " + count);
         List<Event> events;
         try {
-            String sqlQuery = env.getProperty("event.get.last.n.by.type");
+            String sqlQuery = env.getProperty("sql.event.get.last.n.by.type");
             events = jdbcTemplate.query(sqlQuery, new EventRowMapper(), eventType.id(), count);
         } catch (DataAccessException e) {
             log.error("Error getting last events", e);
@@ -73,7 +73,7 @@ public class JdbcEventDao implements EventDao {
         log.debug("Start getEventById with id= " + id);
         Optional<Event> event = Optional.empty();
         try {
-            String sqlQuery = env.getProperty("event.get.by.id");
+            String sqlQuery = env.getProperty("sql.event.get.by.id");
             event = Optional.of(jdbcTemplate.queryForObject(sqlQuery, new EventRowMapper(), id));
         } catch (EmptyResultDataAccessException e) {
             log.warn("Event with id = {} not exist.", id);
@@ -109,7 +109,7 @@ public class JdbcEventDao implements EventDao {
         log.debug("Start getLastEventForUserByOwnerId with user id= " + ownerUserId);
         Optional<Event> event = Optional.empty();
         try {
-            String sqlQuery = env.getProperty("event.get.last.by.owner.id");
+            String sqlQuery = env.getProperty("sql.event.get.last.by.owner.id");
             event = Optional.of(jdbcTemplate.queryForObject(sqlQuery, new EventRowMapper(), ownerUserId));
         } catch (EmptyResultDataAccessException e) {
             log.warn("Event for owner user with id = {} not exist.", ownerUserId);
@@ -126,7 +126,7 @@ public class JdbcEventDao implements EventDao {
         log.debug("Start getLastEventForUserByAssigneeId with user id= " + assigneeUserId);
         Optional<Event> event = Optional.empty();
         try {
-            String sqlQuery = env.getProperty("event.get.last.by.assignee.id");
+            String sqlQuery = env.getProperty("sql.event.get.last.by.assignee.id");
             event = Optional.of(jdbcTemplate.queryForObject(sqlQuery, new EventRowMapper(), assigneeUserId));
         } catch (EmptyResultDataAccessException e) {
             log.trace("Event for assignee user with id = {} not exist.", assigneeUserId);
@@ -150,7 +150,7 @@ public class JdbcEventDao implements EventDao {
 
         @Override
         public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-            String sqlQuery = env.getProperty("event.send");
+            String sqlQuery = env.getProperty("sql.event.send");
             PreparedStatement ps = con.prepareStatement(sqlQuery, new String[]{"id"});
             if (event.getOwner() != null) {
                 ps.setLong(1, event.getOwner().getId());
