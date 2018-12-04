@@ -1,0 +1,45 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection).
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+###
+POST http://localhost:8090/chat/api/users
+Content-Type: application/json
+
+{
+    "name": "test11",
+    "password": "1"
+}
+###
+###
+POST http://localhost:8090/chat/api/sessions
+Content-Type: application/json
+
+{
+    "name": "And",
+    "password": "123"
+}
+
+###
+POST http://localhost:8090/chat/api/auth
+Content-Type: application/json
+
+{
+    "name": "sd",
+    "password": "dsadas"
+}
+###
+
+POST http://localhost:8090/chat/api/allUsers
+Content-Type: application/xml
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<user>
+    <id>1</id>
+    <name>Andrey</name>
+</user>
+
+###

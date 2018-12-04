@@ -1,0 +1,65 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link type="text/css" rel="stylesheet" href="css/login_form.css"/>
+    <title>Insert title here</title>
+    <link type="text/css" rel="stylesheet" href="css/main.css"/>
+    <link type="text/css" rel="stylesheet"
+          href="bootstrap/css/bootstrap.min.css"/>
+</head>
+<body>
+
+<h1>Java Chat</h1>
+<h3 id="chatError"></h3>
+<div id="myModal" class="modal">
+
+
+</div>
+<section>
+    <div class="user-header">
+    </div>
+    <div class="panel panel-primary ppanel-left">
+        <div class="panel-heading">
+            <h3 class="panel-title">Messages</h3>
+        </div>
+        <div class="chat_messages panel-body" id="chat_mes">
+        </div>
+    </div>
+    <div class="input-group ppanel-left">
+        <input type="text" name="text" id="inputMsg" class="form-control"/>
+        <div class="input-group-btn">
+            <button class="btn-size btn btn-success btn-send" type="submit">
+                <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+    <div class="panel panel-primary ppanel-right">
+        <div class="panel-heading">
+            <h3 class="panel-title">Users</h3>
+        </div>
+        <div id="user-list-container" class="user_list panel-body">
+
+        </div>
+    </div>
+</section>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="js/component/loader/CurrentUserLoader.js"></script>
+<script src="js/component/loader/MessageLoader.js"></script>
+<script src="js/component/loader/UserLoader.js"></script>
+<script src="js/component/Event.js"></script>
+<script src="js/component/EventEmitter.js"></script>
+<script src="js/component/User.js"></script>
+<script src="js/model/EventSender.js"></script>
+<script src="js/model/ChatModel.js"></script>
+<script src="js/model/Auth.js"></script>
+<script src="js/view/UsersView.js"></script>
+<script src="js/view/ModalView.js"></script>
+<script src="js/view/AuthHeaderView.js"></script>
+<script src="js/view/UserNameHeaderView.js"></script>
+<script src="js/view/MessagesView.js"></script>
+<script src="js/view/ChatView.js"></script>
+<script src="js/controller/ChatController.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
